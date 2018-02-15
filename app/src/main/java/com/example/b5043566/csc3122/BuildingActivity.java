@@ -14,16 +14,16 @@ public class BuildingActivity extends AppCompatActivity {
     private int i = 0;
     private Handler handler;
     private Runnable runnable;
-
-
+    TextView coins;
+    ImageView bolt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_building);
 
         final Button powerUp = (Button) findViewById(R.id.powerUp);
-        final TextView coins = (TextView) findViewById(R.id.coins);
-        final ImageView bolt = (ImageView) findViewById(R.id.bolt);
+        coins = (TextView) findViewById(R.id.coins);
+         bolt = (ImageView) findViewById(R.id.bolt);
 
         bolt.setVisibility(View.GONE);
         powerUp.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +57,8 @@ public class BuildingActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         handler.removeCallbacks(runnable);
+        coins.setText(String.valueOf(0));
+        bolt.setVisibility(View.GONE);
     };
 
 //    protected void onStop();
