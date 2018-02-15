@@ -1,5 +1,6 @@
 package com.example.b5043566.csc3122;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,9 +8,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class BuildingActivity extends AppCompatActivity {
 
     private int i = 0;
+    private Handler handler;
+    private Runnable runnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +22,7 @@ public class BuildingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_building);
 
         final Button powerUp = (Button) findViewById(R.id.powerUp);
+        final TextView coins = (TextView) findViewById(R.id.coins);
         final ImageView bolt = (ImageView) findViewById(R.id.bolt);
 
         bolt.setVisibility(View.GONE);
@@ -25,9 +31,22 @@ public class BuildingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //when play is clicked show stop button and hide play button
                 bolt.setVisibility(View.VISIBLE);
+
+                final int time = 2000;
+                handler = new Handler();
+
+                handler.postDelayed(runnable = new Runnable(){
+                    public void run(){
+                        coins.setText(String.valueOf(i++));
+                        handler.postDelayed(this, time);
+                    }
+                }, time);
+
             }
         });
     }
+
+
 //    protected void onStart();
 //
 //    protected void onRestart();
@@ -37,7 +56,7 @@ public class BuildingActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
-        ((TextView)findViewById(R.id.coins)).setText(String.valueOf(i++));
+        handler.removeCallbacks(runnable);
     };
 
 //    protected void onStop();
@@ -45,3 +64,4 @@ public class BuildingActivity extends AppCompatActivity {
 //    protected void onDestroy();
 
 }
+
