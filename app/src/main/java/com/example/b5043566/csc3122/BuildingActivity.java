@@ -17,7 +17,7 @@ public class BuildingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_building);
 
         final Button powerUp = (Button) findViewById(R.id.powerUp);
-        ImageView bolt = (ImageView) findViewById(R.id.bolt);
+        final ImageView bolt = (ImageView) findViewById(R.id.bolt);
 
         bolt.setVisibility(View.GONE);
         powerUp.setOnClickListener(new View.OnClickListener() {
