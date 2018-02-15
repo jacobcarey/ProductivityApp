@@ -58,6 +58,7 @@ public class BuildingActivity extends AppCompatActivity {
         super.onPause();
         handler.removeCallbacks(runnable);
         coins.setText(String.valueOf(0));
+        i = 0;
         bolt.setVisibility(View.GONE);
     };
 
