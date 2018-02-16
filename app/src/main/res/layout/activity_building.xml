@@ -28,7 +28,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="7dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.878" />
+        app:layout_constraintHorizontal_bias="0.825" />
 
     <TextView
         android:id="@+id/coins"
@@ -304,5 +304,18 @@
         tools:layout_editor_absoluteY="127dp"
         tools:layout_editor_absoluteX="43dp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="277dp"
+        android:layout_height="37dp"
+        android:progressTint="#DF6467"
+        app:layout_constraintTop_toTopOf="@+id/bolt"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="26dp"
+        android:progress="0"
+        android:max="100"
+        app:layout_constraintRight_toRightOf="@+id/bolt" />
 
-    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
