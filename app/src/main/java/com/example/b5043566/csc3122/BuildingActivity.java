@@ -1,74 +1,54 @@
 package com.example.b5043566.csc3122;
 
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.view.GravityCompat;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
-// Make main activity.
-public class BuildingActivity extends AppCompatActivity {
+public class BuildingActivity extends MainActivity {
 
     private int i = 0;
-    private Handler handler;
+    private Handler handler = new Handler();
     private Runnable runnable;
     private TextView coins;
     private ImageView bolt;
     private ProgressBar progressBar;
     private Button powerUp;
-    private DrawerLayout mDrawerLayout;
     boolean studying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_building);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_building, contentFrameLayout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-//        ActionBar actionbar = getSupportActionBar();
-//        actionbar.setDisplayHomeAsUpEnabled(true);
-//        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
+        if (menu.getParent() != null)
+            ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
+        constraintLayout.addView(menu);
 
         powerUp = (Button) findViewById(R.id.powerUp);
         coins = (TextView) findViewById(R.id.coins);
         bolt = (ImageView) findViewById(R.id.bolt);
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
-                        return true;
-                    }
-                });
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         bolt.setVisibility(View.GONE);
         powerUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!studying){
+                if (!studying) {
                     studying = true;
                     powerUp.setText("Stop");
                     bolt.setVisibility(View.VISIBLE);
@@ -83,7 +63,7 @@ public class BuildingActivity extends AppCompatActivity {
                             handler.postDelayed(this, time);
                         }
                     }, time);
-                }else{
+                } else {
                     studying = false;
                     bolt.setVisibility(View.GONE);
                     powerUp.setText("Study");
@@ -93,42 +73,27 @@ public class BuildingActivity extends AppCompatActivity {
                 }
 
 
-
-
             }
         });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-//    protected void onStart();
-//
-//    protected void onRestart();
-//
-//    protected void onResume();
 
     @Override
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
         coins.setText(String.valueOf(0));
-        i = 0;
+        i = 0; // TODO Remove.
         bolt.setVisibility(View.GONE);
     }
 
-    ;
+//    protected void onStart();
+
+//    protected void onRestart();
+
+//    protected void onResume();
 
 //    protected void onStop();
-//
+
 //    protected void onDestroy();
 
 }
