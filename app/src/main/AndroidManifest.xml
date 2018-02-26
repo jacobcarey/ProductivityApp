@@ -11,17 +11,23 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".BuildingActivity"
-            android:screenOrientation="sensorPortrait"
-            android:label="Main">
+            android:label="Main"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name=".BuildingActivity"-->
-            <!--android:label="@string/title_activity_building"-->
-            <!--android:theme="@style/AppTheme.NoActionBar"></activity>-->
+        <!-- <activity -->
+        <!-- android:name=".BuildingActivity" -->
+        <!-- android:label="@string/title_activity_building" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"></activity> -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LeagueActivity" />
+        <activity android:name=".StatsActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

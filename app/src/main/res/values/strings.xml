@@ -2,4 +2,5 @@
     <string name="app_name">CSC3122</string>
     <string name="title_activity_building">BuildingActivity</string>
     <string name="test">TEST</string>
+    <string name="auth_failed">Auth Failed</string>
 </resources>
