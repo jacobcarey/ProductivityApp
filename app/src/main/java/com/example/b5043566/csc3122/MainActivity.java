@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     protected DrawerLayout mDrawerLayout;
     protected ImageView menu;
-    Toolbar toolbar;
-    ActionBarDrawerToggle actionBarDrawerToggle;
+    protected Toolbar toolbar;
+    protected NavigationView navigationView;
+    protected ActionBarDrawerToggle actionBarDrawerToggle;
     protected static final String TAG = "MainActivity";
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
@@ -49,18 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = new User();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.inflateMenu(R.menu.drawer_view);
-        menu = (ImageView) findViewById(R.id.menu);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -76,10 +66,18 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.inflateMenu(R.menu.drawer_view);
 
+        menu = (ImageView) findViewById(R.id.menu);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.test, R.string.test);
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+        setSupportActionBar(toolbar);
+
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -99,16 +97,16 @@ public class MainActivity extends AppCompatActivity {
                         } else if (id == R.id.home) {
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
-                        }else if (id == R.id.register) {
+                        } else if (id == R.id.register) {
                             Intent newAct = new Intent(getApplicationContext(), RegisterActivity.class);
                             startActivity(newAct);
-                        }else if (id == R.id.league) {
+                        } else if (id == R.id.league) {
                             Intent newAct = new Intent(getApplicationContext(), LeagueActivity.class);
                             startActivity(newAct);
-                        }else if (id == R.id.stats) {
+                        } else if (id == R.id.stats) {
                             Intent newAct = new Intent(getApplicationContext(), StatsActivity.class);
                             startActivity(newAct);
-                        }else if (id == R.id.settings) {
+                        } else if (id == R.id.settings) {
                             Intent newAct = new Intent(getApplicationContext(), SettingActivity.class);
                             startActivity(newAct);
                         }
@@ -123,12 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
         actionBarDrawerToggle.syncState();
     }
-
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        mDrawerLayout.onConfigurationChanged(newConfig);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,33 +139,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    public void setUserListener(){
-        mUserReference.addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        user.email =  dataSnapshot.getValue(User.class).email;
-                        user.lastLogin =  dataSnapshot.getValue(User.class).lastLogin;
-                        user.powerRemaining =  dataSnapshot.getValue(User.class).powerRemaining;
-                        user.timeLimit =  dataSnapshot.getValue(User.class).timeLimit;
-                        user.username =  dataSnapshot.getValue(User.class).username;
-                        user.windows =  dataSnapshot.getValue(User.class).windows;
-                        Log.d(TAG, "Value is: " + user.toString());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Getting Post failed, log a message
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                        // [START_EXCLUDE]
-                        Toast.makeText(MainActivity.this, "Failed to load user.",
-                                Toast.LENGTH_SHORT).show();
-                        // [END_EXCLUDE]
-                    }
-                });
+    public void checkLogin(){
+        if (mAuth.getCurrentUser() == null) {
+            Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(newAct);
+        }
     }
-
 }

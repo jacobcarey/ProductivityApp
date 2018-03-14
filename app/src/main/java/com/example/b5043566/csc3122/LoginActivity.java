@@ -28,13 +28,13 @@ public class LoginActivity extends MainActivity {
     private EditText emailText;
     private EditText passwordText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_login, contentFrameLayout);
 
+        // Adds the menu button and applies a fix.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_login);
         if (menu.getParent() != null)
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
@@ -42,11 +42,13 @@ public class LoginActivity extends MainActivity {
 
         emailText = (EditText) findViewById(R.id.email);
         passwordText = (EditText) findViewById(R.id.password);
-
-        mUserReference = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(mAuth.getCurrentUser().getUid());
-
         submit = (Button) findViewById(R.id.submit);
+
+        // todo fix this.
+//        mUserReference = FirebaseDatabase.getInstance().getReference()
+//                .child("users").child(getmAuth().getCurrentUser().getUid());
+
+        // Submit listener.
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String email = emailText.getText().toString().trim();
@@ -58,6 +60,7 @@ public class LoginActivity extends MainActivity {
 
     }
 
+    // Sign user in.
     public void signIn(String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -78,7 +81,29 @@ public class LoginActivity extends MainActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
-                            setUserListener();
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    user.email = dataSnapshot.getValue(User.class).email;
+                                    user.lastLogin = dataSnapshot.getValue(User.class).lastLogin;
+                                    user.powerRemaining = dataSnapshot.getValue(User.class).powerRemaining;
+                                    user.timeLimit = dataSnapshot.getValue(User.class).timeLimit;
+                                    user.username = dataSnapshot.getValue(User.class).username;
+                                    user.windows = dataSnapshot.getValue(User.class).windows;
+                                    Log.d(TAG, "Value is: " + user.toString());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // Getting Post failed, log a message
+                                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                                    // [START_EXCLUDE]
+                                    Toast.makeText(LoginActivity.this, "Failed to load user.",
+                                            Toast.LENGTH_SHORT).show();
+                                    // [END_EXCLUDE]
+                                }
+                            };
 
                         }
 

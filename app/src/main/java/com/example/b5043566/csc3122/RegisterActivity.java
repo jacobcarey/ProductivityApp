@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,6 +29,7 @@ public class RegisterActivity extends MainActivity {
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class RegisterActivity extends MainActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_register, contentFrameLayout);
 
-
+        // Adds the menu button and applies a fix.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_register);
         if (menu.getParent() != null) {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
@@ -75,6 +77,10 @@ public class RegisterActivity extends MainActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             writeNewUser(user.getUid(),user.getEmail());
+
+                        }
+                        if (!task.isSuccessful()) {
+                            Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
                         }
 
                     }
