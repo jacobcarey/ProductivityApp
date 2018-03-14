@@ -28,7 +28,7 @@ public class StatsActivity extends MainActivity {
         test = (Button) findViewById(R.id.testButton);
         test.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-              mUserReference.child("lastLogin").setValue(System.currentTimeMillis());
+//              mUserReference.child("lastLogin").setValue(System.currentTimeMillis());
 
             }
         });

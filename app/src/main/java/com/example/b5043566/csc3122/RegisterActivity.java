@@ -18,8 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.R.attr.name;
 
@@ -29,7 +32,6 @@ public class RegisterActivity extends MainActivity {
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +80,9 @@ public class RegisterActivity extends MainActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             writeNewUser(user.getUid(),user.getEmail());
 
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastlogin").setValue(System.currentTimeMillis());
                         }
-                        if (!task.isSuccessful()) {
-                            Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
-                        }
+
 
                     }
                 });

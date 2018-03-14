@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,9 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,15 +37,14 @@ public class MainActivity extends AppCompatActivity {
     protected static final String TAG = "MainActivity";
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
-    protected FirebaseDatabase database;
-    protected static User user;
-    protected static DatabaseReference mUserReference;
+    protected static DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -58,6 +53,29 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            ((ProductivityApp) MainActivity.this.getApplication()).setEmail(dataSnapshot.getValue(User.class).getEmail());
+                            ((ProductivityApp) MainActivity.this.getApplication()).setLastLogin(dataSnapshot.getValue(User.class).getLastLogin());
+                            ((ProductivityApp) MainActivity.this.getApplication()).setPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining());
+                            ((ProductivityApp) MainActivity.this.getApplication()).setTimeLimit(dataSnapshot.getValue(User.class).getTimeLimit());
+                            ((ProductivityApp) MainActivity.this.getApplication()).setUsername(dataSnapshot.getValue(User.class).getUsername());
+                            ((ProductivityApp) MainActivity.this.getApplication()).setWindows(dataSnapshot.getValue(User.class).getWindows());
+
+                            Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Getting Post failed, log a message
+                            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                            // [START_EXCLUDE]
+                            Toast.makeText(MainActivity.this, "Failed to load user.",
+                                    Toast.LENGTH_SHORT).show();
+                            // [END_EXCLUDE]
+                        }
+                    });
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

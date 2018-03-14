@@ -44,9 +44,6 @@ public class LoginActivity extends MainActivity {
         passwordText = (EditText) findViewById(R.id.password);
         submit = (Button) findViewById(R.id.submit);
 
-        // todo fix this.
-//        mUserReference = FirebaseDatabase.getInstance().getReference()
-//                .child("users").child(getmAuth().getCurrentUser().getUid());
 
         // Submit listener.
         submit.setOnClickListener(new View.OnClickListener() {
@@ -81,30 +78,7 @@ public class LoginActivity extends MainActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
-                            new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                    user.email = dataSnapshot.getValue(User.class).email;
-                                    user.lastLogin = dataSnapshot.getValue(User.class).lastLogin;
-                                    user.powerRemaining = dataSnapshot.getValue(User.class).powerRemaining;
-                                    user.timeLimit = dataSnapshot.getValue(User.class).timeLimit;
-                                    user.username = dataSnapshot.getValue(User.class).username;
-                                    user.windows = dataSnapshot.getValue(User.class).windows;
-                                    Log.d(TAG, "Value is: " + user.toString());
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Getting Post failed, log a message
-                                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                                    // [START_EXCLUDE]
-                                    Toast.makeText(LoginActivity.this, "Failed to load user.",
-                                            Toast.LENGTH_SHORT).show();
-                                    // [END_EXCLUDE]
-                                }
-                            };
-
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
                         }
 
                     }

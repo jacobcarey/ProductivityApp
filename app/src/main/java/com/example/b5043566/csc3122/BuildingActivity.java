@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class BuildingActivity extends MainActivity {
 
-    int i = 0; // // TODO: Remove
+    int progress = 0; // // TODO: Remove
     private Handler handler = new Handler();
     private Runnable runnable;
     private TextView coins;
@@ -45,24 +45,35 @@ public class BuildingActivity extends MainActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         bolt.setVisibility(View.GONE);
 
+        coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getPowerRemaining()));
+
         powerUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Value is: " + user.toString());
-                coins.setText(String.valueOf(user.powerRemaining));
+                Log.d(TAG, "Value is: " +  ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().toString());
+
                 if (!studying) {
                     studying = true;
                     powerUp.setText("Stop");
                     bolt.setVisibility(View.VISIBLE);
 
-                    final int time = 1000; // todo magic number
+                    final int time = 100; // todo magic number
                     handler = new Handler();
 
                     handler.postDelayed(runnable = new Runnable() {
                         public void run() {
-//                            coins.setText(String.valueOf(i++));
-                            progressBar.setProgress(i);
+                            progressBar.setProgress(progress);
                             handler.postDelayed(this, time);
+                            progress++;
+                            if(progress == 100) { // todo magic number
+                                studying = false;
+                                bolt.setVisibility(View.GONE);
+                                powerUp.setText("Study");
+
+                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (time / 10)); // todo maiic number
+                                coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getPowerRemaining()));
+                                handler.removeCallbacks(runnable);
+                            }
                         }
                     }, time);
                 } else {
@@ -71,7 +82,7 @@ public class BuildingActivity extends MainActivity {
                     powerUp.setText("Study");
                     handler.removeCallbacks(runnable);
                     coins.setText(String.valueOf(0));
-                    i = 0;
+                    progress = 0;
                 }
             }
         });
@@ -81,8 +92,7 @@ public class BuildingActivity extends MainActivity {
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
-//        coins.setText(String.valueOf(0));
-//        i = 0; // TODO Remove and add implemetation.
+        progress = 0; // TODO Remove and add implemetation.
         bolt.setVisibility(View.GONE);
     }
 
