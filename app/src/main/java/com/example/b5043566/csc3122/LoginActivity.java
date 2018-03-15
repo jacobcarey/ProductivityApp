@@ -1,5 +1,6 @@
 package com.example.b5043566.csc3122;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
@@ -79,6 +80,8 @@ public class LoginActivity extends MainActivity {
                             Toast.makeText(LoginActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
+                            Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
+                            startActivity(newAct);
                         }
 
                     }

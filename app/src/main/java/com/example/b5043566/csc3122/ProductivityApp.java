@@ -11,6 +11,7 @@ import java.util.Map;
 public class ProductivityApp extends Application {
 
     private User user = new User();
+    private int powerPerHour;
 
     public User getUser() {
         return user;
@@ -70,5 +71,13 @@ public class ProductivityApp extends Application {
 
     public int getTotalWindows() {
         return user.getTotalWindows();
+    }
+
+    public int getPowerPerHour(){
+        return powerPerHour;
+    }
+
+    public void setPowerPerHour(int powerPerHour){
+        this.powerPerHour = powerPerHour;
     }
 }

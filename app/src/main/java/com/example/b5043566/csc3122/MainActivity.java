@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
     protected static DatabaseReference mDatabase;
+    protected int powerPerHour;
+    private final static int FIVE_MINUTES = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,37 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        menu = (ImageView) findViewById(R.id.menu);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.test, R.string.test);
+        mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+        setSupportActionBar(toolbar);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            navigationView.inflateMenu(R.menu.drawer_view_signed_in);
+            int powerRemaining = ((ProductivityApp) MainActivity.this.getApplication()).getPowerRemaining();
+            long lastLogin = ((ProductivityApp) MainActivity.this.getApplication()).getLastLogin();
+            if(System.currentTimeMillis() - lastLogin > FIVE_MINUTES){
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ( (int) (System.currentTimeMillis() - lastLogin) / FIVE_MINUTES) )); // todo magic numberss!!!!!!
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
+            }
+
+        }else{
+            navigationView.inflateMenu(R.menu.drawer_view);
+        }
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                navigationView.getMenu().clear();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    navigationView.inflateMenu(R.menu.drawer_view_signed_in);
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
@@ -79,22 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    navigationView.inflateMenu(R.menu.drawer_view);
                 }
                 // ...
             }
         };
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.inflateMenu(R.menu.drawer_view);
-
-        menu = (ImageView) findViewById(R.id.menu);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.test, R.string.test);
-        mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
-        setSupportActionBar(toolbar);
-
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -127,10 +144,33 @@ public class MainActivity extends AppCompatActivity {
                         } else if (id == R.id.settings) {
                             Intent newAct = new Intent(getApplicationContext(), SettingActivity.class);
                             startActivity(newAct);
+                        } else if (id == R.id.logout) {
+                            FirebaseAuth.getInstance().signOut();
+                            Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(newAct);
                         }
                         return true;
                     }
                 });
+
+        mDatabase.child("hour").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ((ProductivityApp) MainActivity.this.getApplication()).setPowerPerHour(dataSnapshot.getValue(Integer.class));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+                Toast.makeText(MainActivity.this, "Failed to load user.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        });
+
     }
 
     @Override

@@ -47,6 +47,8 @@ public class BuildingActivity extends MainActivity {
 
         coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getPowerRemaining()));
 
+
+
         powerUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +59,7 @@ public class BuildingActivity extends MainActivity {
                     powerUp.setText("Stop");
                     bolt.setVisibility(View.VISIBLE);
 
-                    final int time = 100; // todo magic number
+                    final int time = 25; // todo magic number
                     handler = new Handler();
 
                     handler.postDelayed(runnable = new Runnable() {
@@ -69,10 +71,11 @@ public class BuildingActivity extends MainActivity {
                                 studying = false;
                                 bolt.setVisibility(View.GONE);
                                 powerUp.setText("Study");
-
-                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (time / 10)); // todo maiic number
-                                coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getPowerRemaining()));
+                                int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
+                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (powerPerHour)); // todo maiic number
+                                coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getPowerRemaining() + (powerPerHour)));
                                 handler.removeCallbacks(runnable);
+                                progress = 0;
                             }
                         }
                     }, time);
@@ -80,9 +83,9 @@ public class BuildingActivity extends MainActivity {
                     studying = false;
                     bolt.setVisibility(View.GONE);
                     powerUp.setText("Study");
-                    handler.removeCallbacks(runnable);
-                    coins.setText(String.valueOf(0));
                     progress = 0;
+                    handler.removeCallbacks(runnable);
+
                 }
             }
         });
@@ -91,9 +94,12 @@ public class BuildingActivity extends MainActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        handler.removeCallbacks(runnable);
-        progress = 0; // TODO Remove and add implemetation.
+        studying = false;
         bolt.setVisibility(View.GONE);
+        powerUp.setText("Study");
+        progress = 0;
+        handler.removeCallbacks(runnable);
+
     }
 
 //    protected void onStart();
