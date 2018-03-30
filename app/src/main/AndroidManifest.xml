@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".SplashActivity"
             android:label="Main"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -28,7 +28,8 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LeagueActivity" />
         <activity android:name=".StatsActivity" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

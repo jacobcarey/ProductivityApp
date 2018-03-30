@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.b5043566.csc3122.RegisterActivity"
     android:id="@+id/active_register"
-    android:background="#181C28">
+    android:background="#171C28">
 
     <EditText
         android:id="@+id/email"

@@ -13,6 +13,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +35,12 @@ public class BuildingActivity extends MainActivity {
     boolean studying = false;
     private Map<String, ImageView> windows;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Check login.
+        checkLogin();
 
         Log.d(TAG, "Value is: " + ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().toString());
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
@@ -52,6 +59,7 @@ public class BuildingActivity extends MainActivity {
         bolt.setVisibility(View.GONE);
         coins = (TextView) findViewById(R.id.coins);
         windows = new HashMap<String, ImageView>();
+
         for (int i = 0; i < 15; i++) { // todo 15 magic, get map size
             int id = (int) R.id.window1 + i;
             windows.put("w_" + i, (ImageView) findViewById(id));
@@ -59,9 +67,55 @@ public class BuildingActivity extends MainActivity {
 
         Log.d(TAG, "Value is: " + windows.toString());
 
-        if(checkLogin()){
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        }
+                for (int i = 0; i < 15; i++) { // todo 15 magic, get map size
+                    // No resident.
+                    if (!dataSnapshot.getValue(User.class).getWindows().get("w_" + i)) {
+                        windows.get("w_" + i).setBackgroundColor(Color.parseColor("#0C2F41"));
+                    } else {
+                        windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
+                    }
+                }
+                coins.setText(String.valueOf(dataSnapshot.getValue(User.class).getPowerRemaining()));
+
+                int powerRemaining = dataSnapshot.getValue(User.class).getPowerRemaining();
+                long lastStudyCheck = dataSnapshot.getValue(User.class).getLastStudyCheck();
+                if ((System.currentTimeMillis() - lastStudyCheck) > FIVE_MINUTES) {
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (System.currentTimeMillis() - lastStudyCheck) / FIVE_MINUTES))); // todo magic numberss!!!!!!
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+                Toast.makeText(BuildingActivity.this, "Failed to load user.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        });
+
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ((ProductivityApp) BuildingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+                Toast.makeText(BuildingActivity.this, "Failed to load user.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
+            }
+        });
 
         powerUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +127,7 @@ public class BuildingActivity extends MainActivity {
                     powerUp.setText("Stop");
                     bolt.setVisibility(View.VISIBLE);
 
-                    final int time = 25; // todo magic number
+                    final int time = 10; // todo magic number
                     handler = new Handler();
 
                     handler.postDelayed(runnable = new Runnable() {
@@ -85,7 +139,7 @@ public class BuildingActivity extends MainActivity {
                                 studying = false;
                                 bolt.setVisibility(View.GONE);
                                 powerUp.setText("Study");
-
+                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
                                 // Increase power.
                                 int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
 
@@ -101,7 +155,7 @@ public class BuildingActivity extends MainActivity {
                                     }
                                 }
                                 // todo magic numbers
-                                int windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * 8);
+                                int windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * 10);
                                 Log.d(TAG, "Window Check: " + windowCheck);
                                 Log.d(TAG, "Current Windows: " + currentWindows);
                                 if (currentWindows == windowCheck) {
@@ -131,15 +185,12 @@ public class BuildingActivity extends MainActivity {
                                         if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
                                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(false);
                                             removeWindow = false;
-                                            windows.get("w_" + n).setBackgroundColor(Color.parseColor("#0B2C3D"));
+                                            windows.get("w_" + n).setBackgroundColor(Color.parseColor("#0C2F41"));
 
                                         }
 
                                     }
                                 }
-
-
-
 
                                 handler.removeCallbacks(runnable);
                                 progress = 0;
@@ -169,22 +220,23 @@ public class BuildingActivity extends MainActivity {
         progress = 0;
         handler.removeCallbacks(runnable);
 
+        if (mAuth.getCurrentUser() != null) {
+            int powerRemaining = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining();
+            long lastStudyCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getLastStudyCheck();
+            if ((System.currentTimeMillis() - lastStudyCheck) > FIVE_MINUTES) {
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (System.currentTimeMillis() - lastStudyCheck) / FIVE_MINUTES))); // todo magic numberss!!!!!!
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+            }
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "On start!");
+        Log.d(TAG, "On start! BuildingActivity");
         mAuth.addAuthStateListener(mAuthListener);
-        for (int i = 0; i < 15; i++) { // todo 15 magic, get map size
-            // No resident.
-            if (!((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + i)) {
-                windows.get("w_" + i).setBackgroundColor(Color.parseColor("#0B2C3D"));
-            }else{
-                windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
-            }
-        }
-        coins.setText(String.valueOf(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining()));
+
+
     }
 
 
@@ -194,6 +246,14 @@ public class BuildingActivity extends MainActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
     }
 
 //    protected void onStart();
@@ -203,6 +263,7 @@ public class BuildingActivity extends MainActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
 //    protected void onStop();

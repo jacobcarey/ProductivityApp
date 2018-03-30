@@ -2,6 +2,7 @@ package com.example.b5043566.csc3122;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected FirebaseAuth.AuthStateListener mAuthListener;
     protected static DatabaseReference mDatabase;
     protected int powerPerHour;
-    private final static int FIVE_MINUTES = 5000;
+    protected final static int FIVE_MINUTES = 50000; // Todo change!
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         mAuth = FirebaseAuth.getInstance();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         menu = (ImageView) findViewById(R.id.menu);
@@ -60,45 +62,10 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
         setSupportActionBar(toolbar);
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            Log.d(TAG, "User exists. ");
-            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
-            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "Data change. " + dataSnapshot.getValue(User.class).getEmail());
 
-                    ((ProductivityApp) MainActivity.this.getApplication()).setEmail(dataSnapshot.getValue(User.class).getEmail());
-                    ((ProductivityApp) MainActivity.this.getApplication()).setLastLogin(dataSnapshot.getValue(User.class).getLastLogin());
-                    ((ProductivityApp) MainActivity.this.getApplication()).setPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining());
-                    ((ProductivityApp) MainActivity.this.getApplication()).setTimeLimit(dataSnapshot.getValue(User.class).getTimeLimit());
-                    ((ProductivityApp) MainActivity.this.getApplication()).setUsername(dataSnapshot.getValue(User.class).getUsername());
-                    ((ProductivityApp) MainActivity.this.getApplication()).setWindows(dataSnapshot.getValue(User.class).getWindows());
+        if (mAuth.getCurrentUser() != null) {
 
-
-
-                    Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().toString());
-                    Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().getWindows().toString());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Getting Post failed, log a message
-                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                    // [START_EXCLUDE]
-                    Toast.makeText(MainActivity.this, "Failed to load user.",
-                            Toast.LENGTH_SHORT).show();
-                    // [END_EXCLUDE]
-                }
-            });
             navigationView.inflateMenu(R.menu.drawer_view_signed_in);
-            int powerRemaining = ((ProductivityApp) MainActivity.this.getApplication()).getUser().getPowerRemaining();
-            long lastLogin = ((ProductivityApp) MainActivity.this.getApplication()).getUser().getLastLogin();
-            if((System.currentTimeMillis() - lastLogin) > FIVE_MINUTES){
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ( (int) (System.currentTimeMillis() - lastLogin) / FIVE_MINUTES) )); // todo magic numberss!!!!!!
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
-            }
 
         }else{
             navigationView.inflateMenu(R.menu.drawer_view);
@@ -114,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.inflateMenu(R.menu.drawer_view_signed_in);
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -163,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        mDatabase.child("hour").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("hour").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ((ProductivityApp) MainActivity.this.getApplication()).setPowerPerHour(dataSnapshot.getValue(Integer.class));
@@ -221,6 +189,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "On start! MainActivity");
+        if (mAuth.getCurrentUser() != null) {
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
+        }
+    }
 
 
 }

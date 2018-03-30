@@ -35,6 +35,7 @@ public class RegisterActivity extends MainActivity {
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
+    int startingPower = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +85,9 @@ public class RegisterActivity extends MainActivity {
                                     Toast.LENGTH_SHORT).show();
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            writeNewUser(user.getUid(),user.getEmail());
-                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(500);
+                            mDatabase.child("users").child(user.getUid()).setValue(new User());
+                            mDatabase.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
+                            mDatabase.child("users").child(user.getUid()).child("powerRemaining").setValue(startingPower);
 
                             // Windows.
                             Random rand = new Random();
@@ -94,6 +96,7 @@ public class RegisterActivity extends MainActivity {
 
                             // Last Login.
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
                         }
@@ -103,11 +106,7 @@ public class RegisterActivity extends MainActivity {
                 });
     }
 
-    private void writeNewUser(String userId, String email) {
-        User user = new User(userId, email);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child(userId).setValue(user);
-    }
+
 
     @Override
     public void onStart() {
