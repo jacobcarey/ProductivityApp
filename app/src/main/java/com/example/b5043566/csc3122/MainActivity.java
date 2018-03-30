@@ -26,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,10 +62,40 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
+            Log.d(TAG, "User exists. ");
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "Data change. " + dataSnapshot.getValue(User.class).getEmail());
+
+                    ((ProductivityApp) MainActivity.this.getApplication()).setEmail(dataSnapshot.getValue(User.class).getEmail());
+                    ((ProductivityApp) MainActivity.this.getApplication()).setLastLogin(dataSnapshot.getValue(User.class).getLastLogin());
+                    ((ProductivityApp) MainActivity.this.getApplication()).setPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining());
+                    ((ProductivityApp) MainActivity.this.getApplication()).setTimeLimit(dataSnapshot.getValue(User.class).getTimeLimit());
+                    ((ProductivityApp) MainActivity.this.getApplication()).setUsername(dataSnapshot.getValue(User.class).getUsername());
+                    ((ProductivityApp) MainActivity.this.getApplication()).setWindows(dataSnapshot.getValue(User.class).getWindows());
+
+
+
+                    Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().toString());
+                    Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().getWindows().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    // [START_EXCLUDE]
+                    Toast.makeText(MainActivity.this, "Failed to load user.",
+                            Toast.LENGTH_SHORT).show();
+                    // [END_EXCLUDE]
+                }
+            });
             navigationView.inflateMenu(R.menu.drawer_view_signed_in);
-            int powerRemaining = ((ProductivityApp) MainActivity.this.getApplication()).getPowerRemaining();
-            long lastLogin = ((ProductivityApp) MainActivity.this.getApplication()).getLastLogin();
-            if(System.currentTimeMillis() - lastLogin > FIVE_MINUTES){
+            int powerRemaining = ((ProductivityApp) MainActivity.this.getApplication()).getUser().getPowerRemaining();
+            long lastLogin = ((ProductivityApp) MainActivity.this.getApplication()).getUser().getLastLogin();
+            if((System.currentTimeMillis() - lastLogin) > FIVE_MINUTES){
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ( (int) (System.currentTimeMillis() - lastLogin) / FIVE_MINUTES) )); // todo magic numberss!!!!!!
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
             }
@@ -81,29 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     navigationView.inflateMenu(R.menu.drawer_view_signed_in);
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            ((ProductivityApp) MainActivity.this.getApplication()).setEmail(dataSnapshot.getValue(User.class).getEmail());
-                            ((ProductivityApp) MainActivity.this.getApplication()).setLastLogin(dataSnapshot.getValue(User.class).getLastLogin());
-                            ((ProductivityApp) MainActivity.this.getApplication()).setPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining());
-                            ((ProductivityApp) MainActivity.this.getApplication()).setTimeLimit(dataSnapshot.getValue(User.class).getTimeLimit());
-                            ((ProductivityApp) MainActivity.this.getApplication()).setUsername(dataSnapshot.getValue(User.class).getUsername());
-                            ((ProductivityApp) MainActivity.this.getApplication()).setWindows(dataSnapshot.getValue(User.class).getWindows());
-
-                            Log.d(TAG, "Value is: " + ((ProductivityApp) MainActivity.this.getApplication()).getUser().toString());
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            // Getting Post failed, log a message
-                            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                            // [START_EXCLUDE]
-                            Toast.makeText(MainActivity.this, "Failed to load user.",
-                                    Toast.LENGTH_SHORT).show();
-                            // [END_EXCLUDE]
-                        }
-                    });
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -197,10 +207,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkLogin(){
+    public boolean checkLogin(){
         if (mAuth.getCurrentUser() == null) {
+            Log.d(TAG, "No current user!");
             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(newAct);
+            finish();
+            return false;
+        }else{
+            Log.d(TAG, "Current user:" + mAuth.getCurrentUser().getEmail());
+
+            return true;
         }
     }
+
+
+
 }

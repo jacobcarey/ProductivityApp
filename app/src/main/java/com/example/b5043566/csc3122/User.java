@@ -16,11 +16,24 @@ public class User {
     private long lastLogin;
     private Map<String, Boolean> windows;
     private final int totalWindows = 15;
+    private long lastActive;
 
 
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+        this.username = "";
+        this.email = "";
+        this.timeLimit = 0;
+        this.powerRemaining = 0;
+        this.windows = new HashMap<String, Boolean>();
+        this.lastLogin = System.currentTimeMillis();
+        this.lastActive = 0;
+
+        // TODO Magic Numbers
+        for(int i = 0; i < totalWindows; i++){
+            windows.put("w_"+Integer.toString(i), false);
+        }
     }
 
     public User(String username, String email) {
@@ -31,6 +44,7 @@ public class User {
         this.powerRemaining = 0;
         this.windows = new HashMap<String, Boolean>();
         this.lastLogin = System.currentTimeMillis();
+        this.lastActive = 0;
 
         // TODO Magic Numbers
         for(int i = 0; i < totalWindows; i++){
@@ -71,6 +85,14 @@ public class User {
 
     public void setPowerRemaining(int powerRemaining) {
         this.powerRemaining = powerRemaining;
+    }
+
+    public long getLastActive() {
+        return lastActive;
+    }
+
+    public void setLastActive(long lastActive) {
+        this.lastActive = lastActive;
     }
 
     public long getLastLogin() {

@@ -1,6 +1,7 @@
 package com.example.b5043566.csc3122;
 
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Random;
 
 import static android.R.attr.name;
 
@@ -77,10 +80,22 @@ public class RegisterActivity extends MainActivity {
                         }
 
                         if (task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Success",
+                                    Toast.LENGTH_SHORT).show();
+
                             FirebaseUser user = mAuth.getCurrentUser();
                             writeNewUser(user.getUid(),user.getEmail());
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(500);
 
-                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastlogin").setValue(System.currentTimeMillis());
+                            // Windows.
+                            Random rand = new Random();
+                            int n = rand.nextInt(15); // Gives n such that 0 <= n < 11 // todo map size
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(true);
+
+                            // Last Login.
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
+                            Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
+                            startActivity(newAct);
                         }
 
 
@@ -92,5 +107,19 @@ public class RegisterActivity extends MainActivity {
         User user = new User(userId, email);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child(userId).setValue(user);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

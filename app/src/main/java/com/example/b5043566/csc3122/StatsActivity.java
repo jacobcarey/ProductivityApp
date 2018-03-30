@@ -25,12 +25,6 @@ public class StatsActivity extends MainActivity {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
-        test = (Button) findViewById(R.id.testButton);
-        test.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-//              mUserReference.child("lastLogin").setValue(System.currentTimeMillis());
 
-            }
-        });
     }
 }

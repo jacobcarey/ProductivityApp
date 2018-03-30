@@ -41,6 +41,8 @@ public class LoginActivity extends MainActivity {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
+
+
         emailText = (EditText) findViewById(R.id.email);
         passwordText = (EditText) findViewById(R.id.password);
         submit = (Button) findViewById(R.id.submit);
@@ -55,7 +57,13 @@ public class LoginActivity extends MainActivity {
 
             }
         });
-
+        if (mAuth.getCurrentUser() != null) {
+            Log.d(TAG, "Logged in!");
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
+            Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
+            startActivity(newAct);
+            finish();
+        }
     }
 
     // Sign user in.
