@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
             navigationView.inflateMenu(R.menu.drawer_view_signed_in);
 
-        }else{
+        } else {
             navigationView.inflateMenu(R.menu.drawer_view);
         }
 
@@ -175,14 +175,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean checkLogin(){
+    public boolean checkLogin() {
         if (mAuth.getCurrentUser() == null) {
             Log.d(TAG, "No current user!");
             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(newAct);
             finish();
             return false;
-        }else{
+        } else {
             Log.d(TAG, "Current user:" + mAuth.getCurrentUser().getEmail());
 
             return true;

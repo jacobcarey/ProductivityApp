@@ -81,12 +81,8 @@ public class BuildingActivity extends MainActivity {
                 }
                 coins.setText(String.valueOf(dataSnapshot.getValue(User.class).getPowerRemaining()));
 
-                int powerRemaining = dataSnapshot.getValue(User.class).getPowerRemaining();
-                long lastStudyCheck = dataSnapshot.getValue(User.class).getLastStudyCheck();
-                if ((System.currentTimeMillis() - lastStudyCheck) > FIVE_MINUTES) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (System.currentTimeMillis() - lastStudyCheck) / FIVE_MINUTES))); // todo magic numberss!!!!!!
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
-                }
+                checkPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining(), dataSnapshot.getValue(User.class).getLastStudyCheck());
+
             }
 
             @Override
@@ -221,12 +217,7 @@ public class BuildingActivity extends MainActivity {
         handler.removeCallbacks(runnable);
 
         if (mAuth.getCurrentUser() != null) {
-            int powerRemaining = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining();
-            long lastStudyCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getLastStudyCheck();
-            if ((System.currentTimeMillis() - lastStudyCheck) > FIVE_MINUTES) {
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (System.currentTimeMillis() - lastStudyCheck) / FIVE_MINUTES))); // todo magic numberss!!!!!!
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
-            }
+            checkPowerRemaining(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining(), ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getLastStudyCheck());
         }
     }
 
@@ -237,6 +228,16 @@ public class BuildingActivity extends MainActivity {
         mAuth.addAuthStateListener(mAuthListener);
 
 
+    }
+
+
+    public void checkPowerRemaining(int power, long lastStudy) {
+        int powerRemaining = power;
+        long lastStudyCheck = lastStudy;
+        if ((System.currentTimeMillis() - lastStudyCheck) > FIVE_MINUTES) {
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (System.currentTimeMillis() - lastStudyCheck) / FIVE_MINUTES))); // todo magic numberss!!!!!!
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+        }
     }
 
 

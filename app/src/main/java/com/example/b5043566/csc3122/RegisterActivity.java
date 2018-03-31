@@ -100,12 +100,9 @@ public class RegisterActivity extends MainActivity {
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
                         }
-
-
                     }
                 });
     }
-
 
 
     @Override

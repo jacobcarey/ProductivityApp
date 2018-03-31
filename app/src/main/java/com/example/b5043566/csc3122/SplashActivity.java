@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-
 public class SplashActivity extends AppCompatActivity {
 
     protected static final String TAG = "SplashActivity";
