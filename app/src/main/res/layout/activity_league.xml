@@ -5,6 +5,403 @@
     android:layout_width="match_parent"
     android:id="@+id/active_league"
     android:layout_height="match_parent"
+    android:background="#171C28"
     tools:context="com.example.b5043566.csc3122.LeagueActivity">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="364dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="68dp"
+        android:gravity="center"
+        android:text="League"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/global"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Global"
+        android:textColor="#FFFFFF"
+        android:background="#171C28"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/textView8"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Friends"
+        android:textColor="#FFFFFF"
+        android:background="#171C28"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/daily"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Daily"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+
+    <Button
+        android:id="@+id/overall"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="64dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Overall"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+    <TextView
+        android:id="@+id/hours5"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="64dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours3" />
+
+    <TextView
+        android:id="@+id/hours4"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours3" />
+
+    <TextView
+        android:id="@+id/hours3"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours2" />
+
+    <TextView
+        android:id="@+id/hours2"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours1" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <Button
+        android:id="@+id/monthly"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Monthly"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/weekly"
+        app:layout_constraintTop_toBottomOf="@+id/global" />
+
+    <Button
+        android:id="@+id/weekly"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Weekly"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/daily"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <TextView
+        android:id="@+id/user1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Hours"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overall" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Posistion"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="124dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Username"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+    <TextView
+        android:id="@+id/user5"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/user4" />
+
+    <TextView
+        android:id="@+id/user4"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/user3" />
+
+    <TextView
+        android:id="@+id/user3"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/user2" />
+
+    <TextView
+        android:id="@+id/user2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/hours5"
+        app:layout_constraintStart_toEndOf="@+id/pos5"
+        app:layout_constraintTop_toBottomOf="@+id/user1" />
+
+    <TextView
+        android:id="@+id/hours1"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <TextView
+        android:id="@+id/pos1"
+        android:layout_width="84dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#1"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:id="@+id/pos5"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#5"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pos4" />
+
+    <TextView
+        android:id="@+id/pos4"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#4"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pos3" />
+
+    <TextView
+        android:id="@+id/pos3"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#3"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pos2" />
+
+    <TextView
+        android:id="@+id/pos2"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="#171C28"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="#2"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pos1" />
+
 
 </android.support.constraint.ConstraintLayout>

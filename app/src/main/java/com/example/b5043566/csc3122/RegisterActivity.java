@@ -17,20 +17,10 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
-
-import static android.R.attr.name;
 
 
 public class RegisterActivity extends MainActivity {
@@ -38,6 +28,7 @@ public class RegisterActivity extends MainActivity {
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
+    private EditText usernameText;
     int startingPower = 750;
 
     @Override
@@ -54,20 +45,22 @@ public class RegisterActivity extends MainActivity {
         }
 
         emailText = (EditText) findViewById(R.id.email);
-        passwordText = (EditText) findViewById(R.id.password);
+        passwordText = (EditText) findViewById(R.id.password2);
+        usernameText = (EditText) findViewById(R.id.username);
 
         submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
-                createAccount(email, password);
+                String username = usernameText.getText().toString().trim();
+                createAccount(email, password, username);
             }
         });
     }
 
 
-    private void createAccount(String email, String password) {
+    private void createAccount(String email, String password, final String username) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -91,6 +84,7 @@ public class RegisterActivity extends MainActivity {
                             mDatabase.child("users").child(user.getUid()).setValue(new User());
                             mDatabase.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
                             mDatabase.child("users").child(user.getUid()).child("powerRemaining").setValue(startingPower);
+                            mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
 
                             // Windows.
                             Random rand = new Random();

@@ -36,7 +36,7 @@ public class StatsActivity extends MainActivity {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
-        daily = (TextView) findViewById(R.id.daily);
+        daily = (TextView) findViewById(R.id.global);
         weekly = (TextView) findViewById(R.id.weekly);
         monthly = (TextView) findViewById(R.id.monthly);
         overall = (TextView) findViewById(R.id.overall);

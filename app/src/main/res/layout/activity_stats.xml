@@ -18,14 +18,16 @@
         android:gravity="center"
         android:text="Stats"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/daily"
+        android:id="@+id/global"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
@@ -53,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/global"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -78,10 +80,10 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/daily" />
+        app:layout_constraintTop_toBottomOf="@+id/global" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/monthly"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -92,7 +94,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/global" />
 
     <TextView
         android:id="@+id/monthly"
@@ -120,7 +122,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/monthly" />
 
     <TextView
         android:id="@+id/overall"

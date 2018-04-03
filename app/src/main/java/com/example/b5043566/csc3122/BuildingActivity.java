@@ -34,6 +34,8 @@ public class BuildingActivity extends MainActivity {
     private Button powerUp;
     boolean studying = false;
     private Map<String, ImageView> windows;
+//    private final int time = 10; // todo magic number
+    private final int time = 30000; // half a minute
 
 
     @Override
@@ -93,12 +95,12 @@ public class BuildingActivity extends MainActivity {
                         powerUp.setText("Stop");
                         bolt.setVisibility(View.VISIBLE);
 
-                        final int time = 10; // todo magic number
+
                         handler = new Handler();
 
                         handler.postDelayed(runnable = new Runnable() {
                             public void run() {
-                                if(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getProgress()){
+                                if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getProgress()) {
                                     progressBar.setProgress(progress);
                                 }
 
@@ -225,17 +227,17 @@ public class BuildingActivity extends MainActivity {
 
                 Calendar cal = Calendar.getInstance();
                 // Update stats.
-                if(dataSnapshot.getValue(User.class).getStatStampMonth() != cal.get(Calendar.MONTH)){
+                if (dataSnapshot.getValue(User.class).getStatStampMonth() != cal.get(Calendar.MONTH)) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(0);
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
                 }
 
-                if(dataSnapshot.getValue(User.class).getStatStampWeek() != cal.get(Calendar.WEEK_OF_YEAR)){
+                if (dataSnapshot.getValue(User.class).getStatStampWeek() != cal.get(Calendar.WEEK_OF_YEAR)) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(0);
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampWeek").setValue(cal.get(Calendar.WEEK_OF_YEAR));
                 }
 
-                if(dataSnapshot.getValue(User.class).getStatStampDay() != cal.get(Calendar.DAY_OF_YEAR)){
+                if (dataSnapshot.getValue(User.class).getStatStampDay() != cal.get(Calendar.DAY_OF_YEAR)) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(0);
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.WEEK_OF_YEAR));
                 }
@@ -262,10 +264,10 @@ public class BuildingActivity extends MainActivity {
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
             if (check > FIVE_MINUTES) {
-                if(check / FIVE_MINUTES < 0){
+                if (check / FIVE_MINUTES < 0) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(0); // todo magic numberss!!!!!!
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
-                }else{
+                } else {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))); // todo magic numberss!!!!!!
                 }
 
