@@ -2,19 +2,20 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/active_stat"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#171C28"
-    tools:context="com.example.b5043566.csc3122.StatsActivity">
+    tools:context="com.example.b5043566.csc3122.StatsActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="364dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
         android:text="Stats"
         android:textAlignment="center"
@@ -27,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/global"
+        android:id="@+id/daily"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
@@ -41,10 +42,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/friendsLeague"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Daily:"
@@ -55,10 +56,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/global"
+        android:id="@+id/globalLeague"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Weekly:"
@@ -66,27 +67,27 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/friendsLeague" />
 
     <TextView
         android:id="@+id/weekly"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="204dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/global" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily" />
 
     <TextView
-        android:id="@+id/monthly"
+        android:id="@+id/monthlyHead"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Monthly:"
@@ -94,27 +95,27 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/global" />
+        app:layout_constraintTop_toBottomOf="@+id/globalLeague" />
 
     <TextView
         android:id="@+id/monthly"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="204dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weekly" />
 
     <TextView
         android:id="@+id/textView13"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Overall:"
@@ -122,28 +123,28 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthly" />
+        app:layout_constraintTop_toBottomOf="@+id/monthlyHead" />
 
     <TextView
         android:id="@+id/overall"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="204dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monthly" />
 
     <TextView
         android:id="@+id/testview25"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="58dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Power Cuts:"
         android:textColor="#FFFFFF"
@@ -156,21 +157,21 @@
         android:id="@+id/powerCuts"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="204dp"
-        android:layout_marginTop="58dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="56dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/overall" />
 
     <TextView
         android:id="@+id/testview22"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="Residents"
@@ -184,16 +185,15 @@
         android:id="@+id/residents"
         android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_marginStart="204dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/powerCuts" />
-
 
 
 </android.support.constraint.ConstraintLayout>

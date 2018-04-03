@@ -34,8 +34,8 @@ public class BuildingActivity extends MainActivity {
     private Button powerUp;
     boolean studying = false;
     private Map<String, ImageView> windows;
-//    private final int time = 10; // todo magic number
-    private final int time = 30000; // half a minute
+    private final int time = 10; // todo magic number
+//    private final int time = 30000; // half a minute
 
 
     @Override
@@ -263,16 +263,14 @@ public class BuildingActivity extends MainActivity {
         if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getHoliday()) {
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
-            if (check > FIVE_MINUTES) {
-                if (check / FIVE_MINUTES < 0) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(0); // todo magic numberss!!!!!!
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
-                } else {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))); // todo magic numberss!!!!!!
-                }
-
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+            if (powerRemaining - (check / FIVE_MINUTES) < 0) {
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(0); // todo magic numberss!!!!!!
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
+            } else {
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))); // todo magic numberss!!!!!!
             }
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
         }
     }
 

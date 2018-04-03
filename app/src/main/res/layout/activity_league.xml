@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/global"
+        android:id="@+id/globalLeague"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/textView8"
+        android:id="@+id/friendsLeague"
         android:layout_width="170dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -57,8 +57,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
-        android:id="@+id/daily"
-        android:layout_width="85dp"
+        android:id="@+id/dailyLeague"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -68,22 +68,22 @@
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/friendsLeague" />
 
 
     <Button
-        android:id="@+id/overall"
-        android:layout_width="85dp"
+        android:id="@+id/overallLeague"
+        android:layout_width="95dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
         android:text="Overall"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/globalLeague" />
 
 
     <TextView
@@ -95,7 +95,6 @@
         android:layout_marginTop="64dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +109,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +123,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,32 +137,17 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hours1" />
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:background="#171C28"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="#"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
     <Button
-        android:id="@+id/monthly"
+        android:id="@+id/monthlyLeague"
         android:layout_width="80dp"
         android:layout_height="50dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
@@ -173,14 +155,15 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/weekly"
-        app:layout_constraintTop_toBottomOf="@+id/global" />
+        app:layout_constraintEnd_toStartOf="@+id/overallLeague"
+        app:layout_constraintStart_toEndOf="@+id/weeklyLeague"
+        app:layout_constraintTop_toBottomOf="@+id/globalLeague" />
 
     <Button
-        android:id="@+id/weekly"
+        android:id="@+id/weeklyLeague"
         android:layout_width="80dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
@@ -188,8 +171,8 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/daily"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintStart_toEndOf="@+id/dailyLeague"
+        app:layout_constraintTop_toBottomOf="@+id/friendsLeague" />
 
     <TextView
         android:id="@+id/user1"
@@ -200,7 +183,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/hours5"
@@ -221,7 +203,7 @@
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overall" />
+        app:layout_constraintTop_toBottomOf="@+id/overallLeague" />
 
     <TextView
         android:id="@+id/textView17"
@@ -235,7 +217,7 @@
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/daily" />
+        app:layout_constraintTop_toBottomOf="@+id/dailyLeague" />
 
     <TextView
         android:id="@+id/textView18"
@@ -263,7 +245,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/hours5"
@@ -279,7 +260,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/hours5"
@@ -295,7 +275,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/hours5"
@@ -311,7 +290,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/hours5"
@@ -327,7 +305,6 @@
         android:layout_marginTop="8dp"
         android:background="#171C28"
         android:gravity="center_vertical|center_horizontal"
-        android:text="#"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
