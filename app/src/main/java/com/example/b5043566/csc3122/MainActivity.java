@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     protected FirebaseAuth.AuthStateListener mAuthListener;
     protected static DatabaseReference mDatabase;
     protected int powerPerHour;
-    protected final static int FIVE_MINUTES = 50000; // Todo change!
+    protected final static int FIVE_MINUTES = 500; // Todo change!
+    public static final int TOTAL_WINDOWS_V1 = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ((ProductivityApp) MainActivity.this.getApplication()).setPowerPerHour(dataSnapshot.getValue(Integer.class));
-
             }
 
             @Override

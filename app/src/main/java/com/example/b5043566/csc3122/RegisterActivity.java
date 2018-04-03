@@ -25,6 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import static android.R.attr.name;
@@ -35,7 +38,7 @@ public class RegisterActivity extends MainActivity {
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
-    int startingPower = 500;
+    int startingPower = 750;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +94,33 @@ public class RegisterActivity extends MainActivity {
 
                             // Windows.
                             Random rand = new Random();
-                            int n = rand.nextInt(15); // Gives n such that 0 <= n < 11 // todo map size
+                            int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(true);
 
                             // Last Login.
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("progress").setValue(true);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(true);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("holiday").setValue(false);
+
+                            // Values initialy set to 0, updated in BuildingActibity.
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(0);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(0);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(0);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("overallHours").setValue(0);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("residents").setValue(0);
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(0);
+
+                            Calendar cal = Calendar.getInstance();
+
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.DAY_OF_YEAR));
+
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampWeek").setValue(cal.get(Calendar.WEEK_OF_YEAR));
+
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
+
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
                         }

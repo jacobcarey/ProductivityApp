@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#171C28">
 
     <item android:drawable="@color/colorPrimary" />
 
     <item>
         <bitmap android:src="@drawable/circle"
             android:gravity="center" />
-
     </item>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="364dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:gravity="center"
+        android:text="Splash (TODO)"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+ />
 
 </layer-list>
