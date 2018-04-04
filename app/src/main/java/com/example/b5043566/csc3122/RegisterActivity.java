@@ -19,7 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 
@@ -116,6 +118,11 @@ public class RegisterActivity extends MainActivity {
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
 
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(true);
+
+                            List<String> friends = new ArrayList<String>();
+                            friends.add(mAuth.getCurrentUser().getUid());
+
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("friends").setValue(friends);
 
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);

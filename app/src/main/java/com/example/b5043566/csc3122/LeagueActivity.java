@@ -1,5 +1,8 @@
 package com.example.b5043566.csc3122;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.constraint.ConstraintLayout;
@@ -8,7 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,6 +100,10 @@ public class LeagueActivity extends MainActivity {
 
         friends = (Button) findViewById(R.id.friendsLeague);
         global = (Button) findViewById(R.id.globalLeague);
+        // Todo, remove on update.
+        friends.setAlpha(.5f);
+        friends.setClickable(false);
+        global.setTextColor(Color.parseColor("F9DFBE"));
 
         // Adds the menu button and applies a fix.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_league);
@@ -272,7 +282,6 @@ public class LeagueActivity extends MainActivity {
                 overall.setTextColor(Color.parseColor("#F9DFBE"));
             }
         });
-
     }
 
     @Override

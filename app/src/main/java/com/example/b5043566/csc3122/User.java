@@ -1,6 +1,8 @@
 package com.example.b5043566.csc3122;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +32,7 @@ public class User {
     private int statStampWeek;
     private int statStampMonth;
     private boolean nightMode;
+    private List<String> friends = new ArrayList<String>();
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -208,6 +211,14 @@ public class User {
 
     public void setNightMode(boolean nightMode) {
         this.nightMode = nightMode;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 
 }
