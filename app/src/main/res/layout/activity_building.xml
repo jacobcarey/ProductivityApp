@@ -301,6 +301,23 @@
         android:layout_marginRight="25dp"
         app:layout_constraintRight_toRightOf="@+id/building" />
 
+    <ImageView
+        android:id="@+id/door"
+        android:layout_width="50dp"
+        android:layout_height="51dp"
+
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:background="#171B29"
+        android:scaleType="fitXY"
+        android:src="@drawable/rectangle"
+        app:layout_constraintBottom_toBottomOf="@+id/bolt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/window14" />
+
 
     <ImageView
         android:id="@+id/bolt"
@@ -316,12 +333,13 @@
         android:background="#171C28"
         android:scaleType="fitXY"
         android:src="@drawable/bolt"
-        android:tint="#FFF"
         app:layout_constraintBottom_toBottomOf="@+id/building"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/powerUp"
         app:layout_constraintVertical_bias="1.0" />
+
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -336,6 +354,7 @@
         app:layout_constraintRight_toRightOf="@+id/bolt"
         app:layout_constraintTop_toTopOf="@+id/bolt"
         android:layout_marginEnd="26dp" />
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -115,6 +115,8 @@ public class RegisterActivity extends MainActivity {
 
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
 
+                            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(true);
+
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
                         }

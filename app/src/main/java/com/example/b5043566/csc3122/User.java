@@ -29,6 +29,7 @@ public class User {
     private int statStampDay;
     private int statStampWeek;
     private int statStampMonth;
+    private boolean nightMode;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -121,12 +122,12 @@ public class User {
         this.notifications = notifications;
     }
 
-    public void setHoliday(boolean holiday) {
-        this.holiday = holiday;
-    }
-
     public boolean getHoliday() {
         return holiday;
+    }
+
+    public void setHoliday(boolean holiday) {
+        this.holiday = holiday;
     }
 
     public int getDailyHours() {
@@ -201,5 +202,12 @@ public class User {
         this.statStampMonth = statStampMonth;
     }
 
+    public boolean getNightMode() {
+        return nightMode;
+    }
+
+    public void setNightMode(boolean nightMode) {
+        this.nightMode = nightMode;
+    }
 
 }

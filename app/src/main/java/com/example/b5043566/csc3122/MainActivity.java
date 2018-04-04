@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
     protected static DatabaseReference mDatabase;
-    protected int powerPerHour;
     protected final static int FIVE_MINUTES = 500; // Todo change!
     public static final int TOTAL_WINDOWS_V1 = 15;
 
@@ -63,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
         setSupportActionBar(toolbar);
 
-
         if (mAuth.getCurrentUser() != null) {
-
             navigationView.inflateMenu(R.menu.drawer_view_signed_in);
 
         } else {
@@ -131,24 +128,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
-
-        mDatabase.child("hour").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ((ProductivityApp) MainActivity.this.getApplication()).setPowerPerHour(dataSnapshot.getValue(Integer.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
-                Toast.makeText(MainActivity.this, "Failed to load user.",
-                        Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
-            }
-        });
-
     }
 
     @Override
@@ -195,7 +174,43 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "On start! MainActivity");
         if (mAuth.getCurrentUser() != null) {
             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
+
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ((ProductivityApp) MainActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    // [START_EXCLUDE]
+                    Toast.makeText(MainActivity.this, "Failed to load user.",
+                            Toast.LENGTH_SHORT).show();
+                    // [END_EXCLUDE]
+                }
+            });
+
+            mDatabase.child("hour").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ((ProductivityApp) MainActivity.this.getApplication()).setPowerPerHour(dataSnapshot.getValue(Integer.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    // [START_EXCLUDE]
+                    Toast.makeText(MainActivity.this, "Failed to load hour.",
+                            Toast.LENGTH_SHORT).show();
+                    // [END_EXCLUDE]
+                }
+            });
         }
+
     }
 
 

@@ -20,6 +20,7 @@ public class SettingActivity extends MainActivity {
     private Button progress;
     private Button notification;
     private Button holiday;
+    private Button nightMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class SettingActivity extends MainActivity {
         progress = (Button) findViewById(R.id.progress);
         notification = (Button) findViewById(R.id.notification);
         holiday = (Button) findViewById(R.id.holiday);
+        nightMode = (Button) findViewById(R.id.nightMode);
 
         // Adds the menu button and applies a fix.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_settings);
@@ -52,9 +54,9 @@ public class SettingActivity extends MainActivity {
             @Override
             public void onClick(View v) {
                 if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNotifications()){
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notification").setValue(false);
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(false);
                 }else{
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notification").setValue(true);
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(true);
                 }
             }});
 
@@ -65,6 +67,16 @@ public class SettingActivity extends MainActivity {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("holiday").setValue(false);
                 }else{
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("holiday").setValue(true);
+                }
+            }});
+
+        nightMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNightMode()){
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(false);
+                }else{
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(true);
                 }
             }});
 
@@ -95,6 +107,14 @@ public class SettingActivity extends MainActivity {
                 }else{
                     holiday.setBackgroundColor(Color.parseColor("#df6467"));
                     holiday.setText("OFF");
+                }
+
+                if(dataSnapshot.getValue(User.class).getNightMode()){
+                    nightMode.setBackgroundColor(Color.parseColor("#92D050"));
+                    nightMode.setText("ON");
+                }else{
+                    nightMode.setBackgroundColor(Color.parseColor("#df6467"));
+                    nightMode.setText("OFF");
                 }
 
             }

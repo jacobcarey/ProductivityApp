@@ -17,39 +17,15 @@ public class ProductivityApp extends Application {
         return powerPerHour;
     }
 
+    public int setPowerPerHour(int powerPerHour){
+        return this.powerPerHour = powerPerHour;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setUsername(String username) {
-        this.user.setUsername(username);
-    }
-
-    public void setEmail(String email) {
-        this.user.setEmail(email);
-    }
-
-    public void setTimeLimit(int timeLimit) {
-        this.user.setTimeLimit(timeLimit);
-    }
-
-    public void setPowerRemaining(int powerRemaining) {
-        this.user.setPowerRemaining(powerRemaining);
-    }
-
-    public void setLastLogin(long lastLogin) {
-        this.user.setLastLogin(lastLogin);
-    }
-
-    public void setWindows(Map<String, Boolean> windows) {
-        this.user.setWindows(windows);
-    }
-
-    public void setPowerPerHour(int powerPerHour){
-        this.powerPerHour = powerPerHour;
     }
 }

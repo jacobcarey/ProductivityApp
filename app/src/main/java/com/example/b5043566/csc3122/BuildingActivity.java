@@ -1,6 +1,8 @@
 package com.example.b5043566.csc3122;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ public class BuildingActivity extends MainActivity {
     private Runnable runnable;
     private TextView powerTotal;
     private ImageView bolt;
+    private ImageView moon;
     private ProgressBar progressBar;
     private Button powerUp;
     boolean studying = false;
@@ -49,16 +52,23 @@ public class BuildingActivity extends MainActivity {
 
             // Adds the menu button and applies a fix.
             final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
-            if (menu.getParent() != null)
+            if (menu.getParent() != null){
                 ((ViewGroup) menu.getParent()).removeView(menu);
+            }
             constraintLayout.addView(menu);
+            if(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getNightMode()){
+                menu.setColorFilter(getResources().getColor(R.color.menuNight));
+            }else{
+                menu.setColorFilter(getResources().getColor(R.color.menuDay));
+            }
 
             // Page elements.
             powerUp = (Button) findViewById(R.id.powerUp);
             bolt = (ImageView) findViewById(R.id.bolt);
-            progressBar = (ProgressBar) findViewById(R.id.progressBar);
             bolt.setVisibility(View.GONE);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
             powerTotal = (TextView) findViewById(R.id.coins);
+            moon = (ImageView) findViewById(R.id.moon);
             windows = new HashMap<String, ImageView>();
 
             for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
@@ -100,10 +110,11 @@ public class BuildingActivity extends MainActivity {
 
                         handler.postDelayed(runnable = new Runnable() {
                             public void run() {
+                                // Progress bar, optional.
                                 if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getProgress()) {
                                     progressBar.setProgress(progress);
                                 }
-
+                                int powerPerHour = ((ProductivityApp)BuildingActivity.this.getApplication()).getPowerPerHour();
                                 handler.postDelayed(this, time);
                                 progress++;
                                 if (progress == 100) { // todo magic number
@@ -112,7 +123,7 @@ public class BuildingActivity extends MainActivity {
                                     powerUp.setText("Study");
                                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
                                     // Increase power.
-                                    int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
+//
                                     Log.d(TAG, "Power per hour: " + powerPerHour);
                                     int powerRemaining = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (powerPerHour);
                                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(powerRemaining);
@@ -125,8 +136,12 @@ public class BuildingActivity extends MainActivity {
                                             currentWindows++;
                                         }
                                     }
-                                    // todo magic numbers
-                                    int windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * 10);
+                                    int windowCheck = 0;
+                                    if(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() != 0){
+                                        // todo magic numbers
+                                        windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * 10);
+                                    }
+
                                     Log.d(TAG, "Window Check: " + windowCheck);
                                     Log.d(TAG, "Current Windows: " + currentWindows);
                                     if (currentWindows == windowCheck) {
@@ -212,7 +227,7 @@ public class BuildingActivity extends MainActivity {
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                ((ProductivityApp) BuildingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
                 for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
                     // No resident.
                     if (!dataSnapshot.getValue(User.class).getWindows().get("w_" + i)) {
@@ -221,7 +236,27 @@ public class BuildingActivity extends MainActivity {
                         windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
                     }
                 }
-                powerTotal.setText(String.valueOf(dataSnapshot.getValue(User.class).getPowerRemaining()));
+
+                ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
+
+                if(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getNightMode()){
+                    constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                    moon.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                    moon.getDrawable().setColorFilter(new
+                            PorterDuffColorFilter(getResources().getColor(R.color.moon), PorterDuff.Mode.MULTIPLY));
+
+                    bolt.setImageResource(R.drawable.bolt);
+                    bolt.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                }else{
+                    constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyDay));
+                    moon.setBackgroundColor(getResources().getColor(R.color.skyDay));
+                    moon.getDrawable().setColorFilter(new
+                            PorterDuffColorFilter(getResources().getColor(R.color.sun), PorterDuff.Mode.MULTIPLY));
+
+                    bolt.setImageResource(R.drawable.bolt_day);
+                    bolt.setBackgroundColor(getResources().getColor(R.color.skyDay));
+
+                }
 
                 checkPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining(), dataSnapshot.getValue(User.class).getLastStudyCheck());
 
@@ -266,8 +301,12 @@ public class BuildingActivity extends MainActivity {
             if (powerRemaining - (check / FIVE_MINUTES) < 0) {
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(0); // todo magic numberss!!!!!!
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
+                powerTotal.setText(String.valueOf(0));
+
             } else {
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))); // todo magic numberss!!!!!!
+                powerTotal.setText(String.valueOf(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))));
+
             }
 
             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());

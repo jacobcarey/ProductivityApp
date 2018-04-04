@@ -3,4 +3,18 @@
     <color name="colorPrimary">#002F41</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FFFFFF</color>
+
+    <color name="skyDay">#CCEDF4</color>
+    <color name="skyNight">#171B29</color>
+
+    <color name="menuDay">#000000</color>
+    <color name="menuNight">#F9DFBE</color>
+
+    <color name="sun">#000000</color>
+    <color name="moon">#F9DFBE</color>
+
+    <color name="boltDay">#000000</color>
+    <color name="boltNight">#FFFFFF</color>
+
+
 </resources>
