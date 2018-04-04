@@ -27,7 +27,7 @@ import java.util.Random;
 public class RegisterActivity extends MainActivity {
 
     // Objects needed.
-    public int static final STARTING_POWER = 750;
+    public static final int STARTING_POWER = 750;
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
@@ -66,6 +66,7 @@ public class RegisterActivity extends MainActivity {
     /**
      * Method used to create and account. Will sign up user with email, username and password. It will also...
      * set initial values needed.
+     *
      * @param email
      * @param password
      * @param username

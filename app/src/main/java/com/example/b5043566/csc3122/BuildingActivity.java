@@ -98,133 +98,138 @@ public class BuildingActivity extends MainActivity {
             powerUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    // Check user is being productive.
-                    if (!productive) {
-                        productive = true;
-                        // Set text to stop as power is generating.
-                        powerUp.setText("Stop");
-                        // Show user the power up bolt.
-                        bolt.setVisibility(View.VISIBLE);
-
-                        // Create new handler.
-                        handler = new Handler();
-
-                        // Used to delay handler so it can run over a set period of time.
-                        handler.postDelayed(runnable = new Runnable() {
-                            public void run() {
-                                // Progress bar, optional. (Can be turned off in settings).
-                                if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getProgress()) {
-                                    progressBar.setProgress(progress);
-                                }
-                                // Create local version of powerPerHour so ease of use.
-                                int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
-                                // Delay check.
-                                // Todo check.
-                                handler.postDelayed(this, time);
-                                // Increment progress.
-                                progress++;
-                                // Check if progress is complete.
-                                if (progress == PROGRESS_COMPLETE) {
-                                    // Turn off productivity.
-                                    productive = false;
-                                    // Find gernerate view.
-                                    bolt.setVisibility(View.GONE);
-                                    // Set text back to study.
-                                    powerUp.setText("Power");
-                                    // Update the last time power was generated.
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
-
-                                    // Increase power.
-                                    // Calculate power remaining.
-                                    int powerRemaining = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (powerPerHour);
-                                    // Update power remaining.
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(powerRemaining);
-                                    // Update power remaining UI.
-                                    powerTotal.setText(Integer.toString(powerRemaining));
-                                    // Check windows.
-                                    int currentWindows = 0;
-                                    // Calculate how many windows are currenly active.
-                                    for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
-                                        boolean window = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + i);
-                                        if (window) {
-                                            currentWindows++;
-                                        }
-                                    }
-                                    // Calculate how many windows SHOULD be currenly active.
-                                    int windowCheck = 0;
-                                    // Check for devision of 0.
-                                    if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() != 0) {
-                                        windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * NEW_RESIDENT_HOURS);
-                                    }
-
-                                    // Check if windows (residents) need adding or deleting.
-                                    if (currentWindows == windowCheck) {
-                                        // All if fine
-                                    } else if (windowCheck > currentWindows) {
-                                        // New window needed.
-                                        boolean newWindow = true;
-                                        // While loop to check winsow location.
-                                        while (newWindow) {
-                                            Random rand = new Random();
-                                            int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15.
-                                            if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
-                                                // Already set, try other.
-                                            } else {
-                                                // Add window here. No window needed.
-                                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(true);
-                                                newWindow = false;
-                                                windows.get("w_" + n).setBackgroundColor(Color.parseColor("#F9DFBE"));
-
-                                            }
-                                        }
-                                        // Check if user has too many windows.
-                                    } else if (windowCheck < currentWindows) {
-                                        boolean removeWindow = true;
-                                        while (removeWindow) {
-                                            Random rand = new Random();
-                                            int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15
-                                            if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
-                                                // Remove window.
-                                                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(false);
-                                                removeWindow = false;
-                                                windows.get("w_" + n).setBackgroundColor(Color.parseColor("#0C2F41"));
-                                            }
-
-                                        }
-                                    }
-
-                                    // Increment for stats.
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getDailyHours() + 1);
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWeeklyHours() + 1);
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getMonthlyHours() + 1);
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("overallHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getOverallHours() + 1);
-                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("residents").setValue(windowCheck);
-
-                                    // Remove handler.
-                                    handler.removeCallbacks(runnable);
-                                    // Set progress back to 0.
-                                    progress = 0;
-
-                                }
-                            }
-                        }, time);
+                    if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getHoliday()) {
+                        // Needs to turn off holiday.
+                        Toast.makeText(BuildingActivity.this, "Please turn off holiday.",
+                                Toast.LENGTH_SHORT).show();
                     } else {
-                        // Reset and called if users stops using button or exits the app.
-                        productive = false;
-                        // Hide power up UI.
-                        bolt.setVisibility(View.GONE);
-                        // Set button text back to starting point.
-                        powerUp.setText("Power");
-                        // Set progress to 0.
-                        progress = 0;
-                        // Remove handler.
-                        handler.removeCallbacks(runnable);
 
+                        // Check user is being productive.
+                        if (!productive) {
+                            productive = true;
+                            // Set text to stop as power is generating.
+                            powerUp.setText("Stop");
+                            // Show user the power up bolt.
+                            bolt.setVisibility(View.VISIBLE);
+
+                            // Create new handler.
+                            handler = new Handler();
+
+                            // Used to delay handler so it can run over a set period of time.
+                            handler.postDelayed(runnable = new Runnable() {
+                                public void run() {
+                                    // Progress bar, optional. (Can be turned off in settings).
+                                    if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getProgress()) {
+                                        progressBar.setProgress(progress);
+                                    }
+                                    // Create local version of powerPerHour so ease of use.
+                                    int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
+                                    // Delay check.
+                                    // Todo check.
+                                    handler.postDelayed(this, time);
+                                    // Increment progress.
+                                    progress++;
+                                    // Check if progress is complete.
+                                    if (progress == PROGRESS_COMPLETE) {
+                                        // Turn off productivity.
+                                        productive = false;
+                                        // Find gernerate view.
+                                        bolt.setVisibility(View.GONE);
+                                        // Set text back to study.
+                                        powerUp.setText("Power");
+                                        // Update the last time power was generated.
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastStudyCheck").setValue(System.currentTimeMillis());
+
+                                        // Increase power.
+                                        // Calculate power remaining.
+                                        int powerRemaining = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() + (powerPerHour);
+                                        // Update power remaining.
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(powerRemaining);
+                                        // Update power remaining UI.
+                                        powerTotal.setText(Integer.toString(powerRemaining));
+                                        // Check windows.
+                                        int currentWindows = 0;
+                                        // Calculate how many windows are currenly active.
+                                        for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
+                                            boolean window = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + i);
+                                            if (window) {
+                                                currentWindows++;
+                                            }
+                                        }
+                                        // Calculate how many windows SHOULD be currenly active.
+                                        int windowCheck = 0;
+                                        // Check for devision of 0.
+                                        if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() != 0) {
+                                            windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * NEW_RESIDENT_HOURS);
+                                        }
+
+                                        // Check if windows (residents) need adding or deleting.
+                                        if (currentWindows == windowCheck) {
+                                            // All if fine
+                                        } else if (windowCheck > currentWindows) {
+                                            // New window needed.
+                                            boolean newWindow = true;
+                                            // While loop to check winsow location.
+                                            while (newWindow) {
+                                                Random rand = new Random();
+                                                int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15.
+                                                if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
+                                                    // Already set, try other.
+                                                } else {
+                                                    // Add window here. No window needed.
+                                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(true);
+                                                    newWindow = false;
+                                                    windows.get("w_" + n).setBackgroundColor(Color.parseColor("#F9DFBE"));
+
+                                                }
+                                            }
+                                            // Check if user has too many windows.
+                                        } else if (windowCheck < currentWindows) {
+                                            boolean removeWindow = true;
+                                            while (removeWindow) {
+                                                Random rand = new Random();
+                                                int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15
+                                                if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
+                                                    // Remove window.
+                                                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(false);
+                                                    removeWindow = false;
+                                                    windows.get("w_" + n).setBackgroundColor(Color.parseColor("#0C2F41"));
+                                                }
+
+                                            }
+                                        }
+
+                                        // Increment for stats.
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getDailyHours() + 1);
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWeeklyHours() + 1);
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getMonthlyHours() + 1);
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("overallHours").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getOverallHours() + 1);
+                                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("residents").setValue(windowCheck);
+
+                                        // Remove handler.
+                                        handler.removeCallbacks(runnable);
+                                        // Set progress back to 0.
+                                        progress = 0;
+
+                                    }
+                                }
+                            }, time);
+                        } else {
+                            // Reset and called if users stops using button or exits the app.
+                            productive = false;
+                            // Hide power up UI.
+                            bolt.setVisibility(View.GONE);
+                            // Set button text back to starting point.
+                            powerUp.setText("Power");
+                            // Set progress to 0.
+                            progress = 0;
+                            // Remove handler.
+                            handler.removeCallbacks(runnable);
+
+                        }
                     }
                 }
             });
-
         }
     }
 
@@ -254,91 +259,91 @@ public class BuildingActivity extends MainActivity {
         super.onStart();
         // Add auth listener.
         mAuth.addAuthStateListener(mAuthListener);
+        if (mAuth.getCurrentUser() != null) {
+            // Single event listener. Used to update vales when app has been exited.
+            mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Set global user values.
+                    ((ProductivityApp) BuildingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
+                    // Update windows to show correct data from database.
+                    for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
+                        // No resident.
+                        if (!dataSnapshot.getValue(User.class).getWindows().get("w_" + i)) {
+                            windows.get("w_" + i).setBackgroundColor(Color.parseColor("#0C2F41"));
+                        } else {
+                            windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
+                        }
+                    }
+                    // Variable needed to update UI mode.
+                    ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
 
-        // Single event listener. Used to update vales when app has been exited.
-        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Set global user values.
-                ((ProductivityApp) BuildingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
-                // Update windows to show correct data from database.
-                for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
-                    // No resident.
-                    if (!dataSnapshot.getValue(User.class).getWindows().get("w_" + i)) {
-                        windows.get("w_" + i).setBackgroundColor(Color.parseColor("#0C2F41"));
+                    // Check if user has night mode turned on. (Will automatically do this is future update).
+                    if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getNightMode()) {
+                        // Set background colour to night.
+                        constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                        // Match sky colour.
+                        moon.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                        // Change colour to look like a moon.
+                        moon.getDrawable().setColorFilter(new
+                                PorterDuffColorFilter(getResources().getColor(R.color.moon), PorterDuff.Mode.MULTIPLY));
+
+                        // Set to night bolt.
+                        bolt.setImageResource(R.drawable.bolt);
+                        bolt.setBackgroundColor(getResources().getColor(R.color.skyNight));
+                        // Needed to update menu. Otherwise is hard to see.
+                        menu.setColorFilter(getResources().getColor(R.color.menuNight));
                     } else {
-                        windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
+                        // Set background colour to day.
+                        constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyDay));
+                        // Match sky colour.
+                        moon.setBackgroundColor(getResources().getColor(R.color.skyDay));
+                        // Change colour to look like a moon.
+                        moon.getDrawable().setColorFilter(new
+                                PorterDuffColorFilter(getResources().getColor(R.color.sun), PorterDuff.Mode.MULTIPLY));
+
+                        //Set to day bolt.
+                        bolt.setImageResource(R.drawable.bolt_day);
+                        bolt.setBackgroundColor(getResources().getColor(R.color.skyDay));
+                        // Needed to update menu. Otherwise is hard to see.
+                        menu.setColorFilter(getResources().getColor(R.color.menuDay));
+
+                    }
+
+                    // Check power remaining and initiate the required updates.
+                    checkPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining(), dataSnapshot.getValue(User.class).getLastStudyCheck());
+
+                    // Needed to update values for stats.
+                    Calendar cal = Calendar.getInstance();
+                    // Update stats.
+                    // Month stats.
+                    if (dataSnapshot.getValue(User.class).getStatStampMonth() != cal.get(Calendar.MONTH)) {
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(0);
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
+                    }
+                    // Week Stats,
+                    if (dataSnapshot.getValue(User.class).getStatStampWeek() != cal.get(Calendar.WEEK_OF_YEAR)) {
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(0);
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampWeek").setValue(cal.get(Calendar.WEEK_OF_YEAR));
+                    }
+                    // Year stats.
+                    if (dataSnapshot.getValue(User.class).getStatStampDay() != cal.get(Calendar.DAY_OF_YEAR)) {
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(0);
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.WEEK_OF_YEAR));
                     }
                 }
-                // Variable needed to update UI mode.
-                ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
 
-                // Check if user has night mode turned on. (Will automatically do this is future update).
-                if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getNightMode()) {
-                    // Set background colour to night.
-                    constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyNight));
-                    // Match sky colour.
-                    moon.setBackgroundColor(getResources().getColor(R.color.skyNight));
-                    // Change colour to look like a moon.
-                    moon.getDrawable().setColorFilter(new
-                            PorterDuffColorFilter(getResources().getColor(R.color.moon), PorterDuff.Mode.MULTIPLY));
-
-                    // Set to night bolt.
-                    bolt.setImageResource(R.drawable.bolt);
-                    bolt.setBackgroundColor(getResources().getColor(R.color.skyNight));
-                    // Needed to update menu. Otherwise is hard to see.
-                    menu.setColorFilter(getResources().getColor(R.color.menuNight));
-                } else {
-                    // Set background colour to day.
-                    constraintLayout.setBackgroundColor(getResources().getColor(R.color.skyDay));
-                    // Match sky colour.
-                    moon.setBackgroundColor(getResources().getColor(R.color.skyDay));
-                    // Change colour to look like a moon.
-                    moon.getDrawable().setColorFilter(new
-                            PorterDuffColorFilter(getResources().getColor(R.color.sun), PorterDuff.Mode.MULTIPLY));
-
-                    /Set to day bolt.
-                    bolt.setImageResource(R.drawable.bolt_day);
-                    bolt.setBackgroundColor(getResources().getColor(R.color.skyDay));
-                    // Needed to update menu. Otherwise is hard to see.
-                    menu.setColorFilter(getResources().getColor(R.color.menuDay));
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    // [START_EXCLUDE]
+                    Toast.makeText(BuildingActivity.this, "Failed to load user.",
+                            Toast.LENGTH_SHORT).show();
+                    // [END_EXCLUDE]
                 }
-
-                // Check power remaining and initiate the required updates.
-                checkPowerRemaining(dataSnapshot.getValue(User.class).getPowerRemaining(), dataSnapshot.getValue(User.class).getLastStudyCheck());
-
-                // Needed to update values for stats.
-                Calendar cal = Calendar.getInstance();
-                // Update stats.
-                // Month stats.
-                if (dataSnapshot.getValue(User.class).getStatStampMonth() != cal.get(Calendar.MONTH)) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(0);
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
-                }
-                // Week Stats,
-                if (dataSnapshot.getValue(User.class).getStatStampWeek() != cal.get(Calendar.WEEK_OF_YEAR)) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(0);
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampWeek").setValue(cal.get(Calendar.WEEK_OF_YEAR));
-                }
-                // Year stats.
-                if (dataSnapshot.getValue(User.class).getStatStampDay() != cal.get(Calendar.DAY_OF_YEAR)) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(0);
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.WEEK_OF_YEAR));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
-                Toast.makeText(BuildingActivity.this, "Failed to load user.",
-                        Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
-            }
-        });
-
+            });
+        }
     }
 
     /**
@@ -351,6 +356,7 @@ public class BuildingActivity extends MainActivity {
         int powerRemaining = power;
         long lastStudyCheck = lastStudy;
         if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getHoliday()) {
+            powerTotal.setText(String.valueOf(powerRemaining));
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
             if (powerRemaining - (check / FIVE_MINUTES) < 0) {

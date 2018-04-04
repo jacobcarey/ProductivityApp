@@ -174,7 +174,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
-        android:text="Residents"
+        android:text="Residents:"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Get FireBase Auth instance.
-        mAuth = FirebaseAuth.getInstance();]
+        mAuth = FirebaseAuth.getInstance();
 
         // Set UI elements.
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Checks if user is logged in.
+     *
      * @return
      */
     public boolean checkLogin() {

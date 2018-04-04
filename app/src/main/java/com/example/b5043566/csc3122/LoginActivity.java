@@ -62,7 +62,8 @@ public class LoginActivity extends MainActivity {
     }
 
     /**
-     *  Signs in user with the given credentials.
+     * Signs in user with the given credentials.
+     *
      * @param email
      * @param password
      */

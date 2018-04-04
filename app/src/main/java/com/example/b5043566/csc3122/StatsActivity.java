@@ -39,7 +39,7 @@ public class StatsActivity extends MainActivity {
         constraintLayout.addView(menu);
 
         // Set UI elements.
-        daily = (TextView) findViewById(R.id.weekly);
+        daily = (TextView) findViewById(R.id.daily);
         weekly = (TextView) findViewById(R.id.weekly);
         monthly = (TextView) findViewById(R.id.monthly);
         overall = (TextView) findViewById(R.id.overall);

@@ -312,6 +312,7 @@ public class LeagueActivity extends MainActivity {
 
     /**
      * Used to find and show the league.
+     *
      * @param show
      */
     public void showLeague(boolean show) {
