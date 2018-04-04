@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class StatsActivity extends MainActivity {
 
+    // Objects needed for UI.
     private Button test;
     private TextView daily;
     private TextView weekly;
@@ -26,6 +27,7 @@ public class StatsActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Check user is logged in.
         checkLogin();
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_stats, contentFrameLayout);
@@ -36,6 +38,7 @@ public class StatsActivity extends MainActivity {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
+        // Set UI elements.
         daily = (TextView) findViewById(R.id.weekly);
         weekly = (TextView) findViewById(R.id.weekly);
         monthly = (TextView) findViewById(R.id.monthly);
@@ -43,10 +46,14 @@ public class StatsActivity extends MainActivity {
         powerCuts = (TextView) findViewById(R.id.powerCuts);
         residents = (TextView) findViewById(R.id.residents);
 
+        // Event listener to update stats line upon change of data.
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Update global user stats.
                 ((ProductivityApp) StatsActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
+
+                // Update UI text.
                 daily.setText(Integer.toString(((ProductivityApp) StatsActivity.this.getApplication()).getUser().getDailyHours()));
                 weekly.setText(Integer.toString(((ProductivityApp) StatsActivity.this.getApplication()).getUser().getWeeklyHours()));
                 monthly.setText(Integer.toString(((ProductivityApp) StatsActivity.this.getApplication()).getUser().getMonthlyHours()));

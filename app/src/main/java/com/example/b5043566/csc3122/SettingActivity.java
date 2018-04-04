@@ -24,21 +24,24 @@ public class SettingActivity extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Check user is logged in.
         checkLogin();
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_setting, contentFrameLayout);
 
+        // UI elements.
         progress = (Button) findViewById(R.id.progress);
         notification = (Button) findViewById(R.id.notification);
         holiday = (Button) findViewById(R.id.holiday);
         nightMode = (Button) findViewById(R.id.nightMode);
 
-        // Adds the menu button and applies a fix.
+        // Adds the menu button and applies a fix to allow menu click.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_settings);
         if (menu.getParent() != null)
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
+        // On click listener for the progress button.
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +53,7 @@ public class SettingActivity extends MainActivity {
             }
         });
 
+        // On click listener for the users button.
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +65,7 @@ public class SettingActivity extends MainActivity {
             }
         });
 
+        // On click listener for the holiday button.
         holiday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +77,7 @@ public class SettingActivity extends MainActivity {
             }
         });
 
+        // On click listener for the night mode button.
         nightMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,10 +90,14 @@ public class SettingActivity extends MainActivity {
         });
 
 
+        // This will listen for databse changed and will change the UI accordingly.
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Update global user object.
                 ((ProductivityApp) SettingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
+
+                // Update progrss UI.
                 if (dataSnapshot.getValue(User.class).getProgress()) {
                     progress.setBackgroundColor(Color.parseColor("#92D050"));
                     progress.setText("ON");
@@ -96,6 +106,7 @@ public class SettingActivity extends MainActivity {
                     progress.setText("OFF");
                 }
 
+                // Update notification UI.
                 if (dataSnapshot.getValue(User.class).getNotifications()) {
                     notification.setBackgroundColor(Color.parseColor("#92D050"));
                     notification.setText("ON");
@@ -104,6 +115,7 @@ public class SettingActivity extends MainActivity {
                     notification.setText("OFF");
                 }
 
+                // Update holiday UI.
                 if (dataSnapshot.getValue(User.class).getHoliday()) {
                     holiday.setBackgroundColor(Color.parseColor("#92D050"));
                     holiday.setText("ON");
@@ -112,6 +124,7 @@ public class SettingActivity extends MainActivity {
                     holiday.setText("OFF");
                 }
 
+                // Update nightmode UI.
                 if (dataSnapshot.getValue(User.class).getNightMode()) {
                     nightMode.setBackgroundColor(Color.parseColor("#92D050"));
                     nightMode.setText("ON");

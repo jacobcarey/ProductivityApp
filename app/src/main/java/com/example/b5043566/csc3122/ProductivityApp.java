@@ -8,9 +8,12 @@ import android.app.Application;
 
 public class ProductivityApp extends Application {
 
+    // Used for global values.
     private User user = new User();
     private int powerPerHour;
 
+
+    // Getters and setters.
     public int getPowerPerHour() {
         return powerPerHour;
     }

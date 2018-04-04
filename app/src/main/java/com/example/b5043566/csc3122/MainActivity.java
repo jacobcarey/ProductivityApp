@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Objects needed for page.
     public static final int TOTAL_WINDOWS_V1 = 15;
     protected static final String TAG = "MainActivity";
     protected final static int FIVE_MINUTES = 500; // Todo change!
@@ -44,9 +45,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Data database reference.
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mAuth = FirebaseAuth.getInstance();
+        // Get FireBase Auth instance.
+        mAuth = FirebaseAuth.getInstance();]
+
+        // Set UI elements.
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         menu = (ImageView) findViewById(R.id.menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -56,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
         setSupportActionBar(toolbar);
 
+        // Set munu items depending on if user is logged in.
         if (mAuth.getCurrentUser() != null) {
             navigationView.inflateMenu(R.menu.drawer_view_signed_in);
-
         } else {
             navigationView.inflateMenu(R.menu.drawer_view);
         }
 
-
+        // Auth listener to detect if user is logged in.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -79,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     navigationView.inflateMenu(R.menu.drawer_view);
                 }
-                // ...
             }
         };
 
+        // Sets up listener for the buttons in the menu.
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -92,10 +97,9 @@ public class MainActivity extends AppCompatActivity {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        int id = menuItem.getItemId();
 
+                        // Starts new activity based on user click.
+                        int id = menuItem.getItemId();
                         if (id == R.id.login) {
                             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(newAct);
@@ -148,16 +152,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Checks if user is logged in.
+     * @return
+     */
     public boolean checkLogin() {
         if (mAuth.getCurrentUser() == null) {
-            Log.d(TAG, "No current user!");
+            // If not logged in then start go to Login Activity.
             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(newAct);
             finish();
             return false;
         } else {
-            Log.d(TAG, "Current user:" + mAuth.getCurrentUser().getEmail());
-
             return true;
         }
     }
@@ -165,10 +171,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "On start! MainActivity");
+
+        // Check user is logged in.
         if (mAuth.getCurrentUser() != null) {
+            // Update last active.
             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
 
+            // Single event listener, used to update global user class.
             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -187,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            // Action listener for power per hour value. Allows value to be dynamically updated via the database.
             mDatabase.child("hour").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

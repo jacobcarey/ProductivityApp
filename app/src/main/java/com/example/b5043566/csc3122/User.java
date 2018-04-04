@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class User {
 
+    // Variables needed for user.
     private String username;
     private String email;
     private int timeLimit;
@@ -33,6 +34,8 @@ public class User {
     private int statStampMonth;
     private boolean nightMode;
     private List<String> friends = new ArrayList<String>();
+
+    // Getters and setters.
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

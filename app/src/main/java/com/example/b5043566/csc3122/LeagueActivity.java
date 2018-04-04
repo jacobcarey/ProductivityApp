@@ -25,6 +25,7 @@ import java.util.TreeSet;
 
 public class LeagueActivity extends MainActivity {
 
+    // Objects needed.
     Map<String, Integer> dailyLeague = new HashMap<String, Integer>();
     Map<String, Integer> weeklyLeague = new HashMap<String, Integer>();
     Map<String, Integer> monthlyLeague = new HashMap<String, Integer>();
@@ -55,11 +56,15 @@ public class LeagueActivity extends MainActivity {
     private List<String> topFiveMonthly = new ArrayList<String>();
     private List<String> topFiveOverall = new ArrayList<String>();
 
+    public final static int TOP_FIVE = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Check login.
+        // Check user is logged in.
         checkLogin();
+
+        // Needed for menu item to show show.
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_league, contentFrameLayout);
 
@@ -81,6 +86,7 @@ public class LeagueActivity extends MainActivity {
         hour4 = (TextView) findViewById(R.id.hours4);
         hour5 = (TextView) findViewById(R.id.hours5);
 
+        // Tabs for selecting leaderboard.
         daily = (Button) findViewById(R.id.dailyLeague);
         weekly = (Button) findViewById(R.id.weeklyLeague);
         monthly = (Button) findViewById(R.id.monthlyLeague);
@@ -93,16 +99,18 @@ public class LeagueActivity extends MainActivity {
         friends.setClickable(false);
         global.setTextColor(Color.parseColor("#F9DFBE"));
 
-        // Adds the menu button and applies a fix.
+        // Adds the menu button and applies a fix to allow menu item to be clickable.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_league);
         if (menu.getParent() != null)
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
+        // Event listener
         mDatabase.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Add values to the maps.
                     User user = snapshot.getValue(User.class);
                     dailyLeague.put(user.getUsername(), user.getDailyHours());
                     weeklyLeague.put(user.getUsername(), user.getWeeklyHours());
@@ -111,6 +119,7 @@ public class LeagueActivity extends MainActivity {
                 }
 
                 // Daily top 5.
+                // Not the nicest solution but works to rank the top 5 users efficiently.
                 SortedSet<String> usernames = new TreeSet<String>(dailyLeague.keySet());
                 for (int i = 0; i < 5; i++) { // todo magic
                     String currentLargest = usernames.first();
@@ -124,8 +133,9 @@ public class LeagueActivity extends MainActivity {
                 }
 
                 // Weekly top 5.
+                // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(weeklyLeague.keySet());
-                for (int i = 0; i < 5; i++) { // todo magic
+                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (weeklyLeague.get(username) > weeklyLeague.get(currentLargest)) {
@@ -137,8 +147,9 @@ public class LeagueActivity extends MainActivity {
                 }
 
                 // Monthly top 5.
+                // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(monthlyLeague.keySet());
-                for (int i = 0; i < 5; i++) { // todo magic
+                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (monthlyLeague.get(username) > monthlyLeague.get(currentLargest)) {
@@ -148,9 +159,10 @@ public class LeagueActivity extends MainActivity {
                     topFiveMonthly.add(currentLargest);
                     usernames.remove(currentLargest);
                 }
-
+                // Overall top 5.
+                // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(overallLeague.keySet());
-                for (int i = 0; i < 5; i++) { // todo magic
+                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (overallLeague.get(username) > overallLeague.get(currentLargest)) {
@@ -175,23 +187,28 @@ public class LeagueActivity extends MainActivity {
             }
         });
 
+        // NOTE:
+        // The above and below could have been done better using methods, however, had to spread them out during debugging.
         daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showLeague(true);
 
+                // Set username on UI.
                 user1.setText(topFiveDaily.get(0));
                 user2.setText(topFiveDaily.get(1));
                 user3.setText(topFiveDaily.get(2));
                 user4.setText(topFiveDaily.get(3));
                 user5.setText(topFiveDaily.get(4));
 
+                // Set hours on UI.
                 hour1.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(0))));
                 hour2.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(1))));
                 hour3.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(2))));
                 hour4.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(3))));
                 hour5.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(4))));
 
+                // Set colours.
                 daily.setTextColor(Color.parseColor("#F9DFBE"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
@@ -204,18 +221,21 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
                 showLeague(true);
 
+                // Set username on UI.
                 user1.setText(topFiveWeekly.get(0));
                 user2.setText(topFiveWeekly.get(1));
                 user3.setText(topFiveWeekly.get(2));
                 user4.setText(topFiveWeekly.get(3));
                 user5.setText(topFiveWeekly.get(4));
 
+                // Set hours on UI.
                 hour1.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(0))));
                 hour2.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(1))));
                 hour3.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(2))));
                 hour4.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(3))));
                 hour5.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(4))));
 
+                // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#F9DFBE"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
@@ -228,18 +248,21 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
                 showLeague(true);
 
+                // Set username on UI.
                 user1.setText(topFiveMonthly.get(0));
                 user2.setText(topFiveMonthly.get(1));
                 user3.setText(topFiveOverall.get(2));
                 user4.setText(topFiveOverall.get(3));
                 user5.setText(topFiveOverall.get(4));
 
+                // Set hours on UI.
                 hour1.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(0))));
                 hour2.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(1))));
                 hour3.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(2))));
                 hour4.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(3))));
                 hour5.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(4))));
 
+                // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#F9DFBE"));
@@ -252,18 +275,21 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
                 showLeague(true);
 
+                // Set username on UI.
                 user1.setText(topFiveOverall.get(0));
                 user2.setText(topFiveOverall.get(1));
                 user3.setText(topFiveOverall.get(2));
                 user4.setText(topFiveOverall.get(3));
                 user5.setText(topFiveOverall.get(4));
 
+                // Set hours on UI.
                 hour1.setText(Integer.toString(overallLeague.get(topFiveOverall.get(0))));
                 hour2.setText(Integer.toString(overallLeague.get(topFiveOverall.get(1))));
                 hour3.setText(Integer.toString(overallLeague.get(topFiveOverall.get(2))));
                 hour4.setText(Integer.toString(overallLeague.get(topFiveOverall.get(3))));
                 hour5.setText(Integer.toString(overallLeague.get(topFiveOverall.get(4))));
 
+                // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
@@ -276,13 +302,18 @@ public class LeagueActivity extends MainActivity {
     public void onStart() {
         super.onStart();
 
+        // Hide league.
         showLeague(false);
 
-        // todo remove on update
+        // todo remove on update.
         friends.setPaintFlags(friends.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
 
+    /**
+     * Used to find and show the league.
+     * @param show
+     */
     public void showLeague(boolean show) {
         if (show) {
             pos1.setVisibility(View.VISIBLE);

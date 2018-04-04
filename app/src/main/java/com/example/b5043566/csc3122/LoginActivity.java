@@ -34,6 +34,7 @@ public class LoginActivity extends MainActivity {
             ((ViewGroup) menu.getParent()).removeView(menu); // <- fix for adding menu button.
         constraintLayout.addView(menu);
 
+        // If user is logged in then update "last active".
         if (mAuth.getCurrentUser() != null) {
             Log.d(TAG, "Logged in!");
             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastActive").setValue(System.currentTimeMillis());
@@ -42,6 +43,7 @@ public class LoginActivity extends MainActivity {
             finish();
         }
 
+        // On screen elements needed.
         emailText = (EditText) findViewById(R.id.email);
         passwordText = (EditText) findViewById(R.id.username);
         submit = (Button) findViewById(R.id.submit);
@@ -59,7 +61,11 @@ public class LoginActivity extends MainActivity {
 
     }
 
-    // Sign user in.
+    /**
+     *  Signs in user with the given credentials.
+     * @param email
+     * @param password
+     */
     public void signIn(String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -80,6 +86,7 @@ public class LoginActivity extends MainActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
+                            // Update last login.
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("lastLogin").setValue(System.currentTimeMillis());
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);

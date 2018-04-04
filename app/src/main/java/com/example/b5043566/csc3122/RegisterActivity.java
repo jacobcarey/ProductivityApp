@@ -26,7 +26,8 @@ import java.util.Random;
 
 public class RegisterActivity extends MainActivity {
 
-    int startingPower = 750;
+    // Objects needed.
+    public int static final STARTING_POWER = 750;
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
@@ -45,10 +46,12 @@ public class RegisterActivity extends MainActivity {
             constraintLayout.addView(menu);
         }
 
+        // On screen elements.
         emailText = (EditText) findViewById(R.id.email);
         passwordText = (EditText) findViewById(R.id.password2);
         usernameText = (EditText) findViewById(R.id.username);
 
+        // On click listener for submit buttona and logging in.
         submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,7 +63,13 @@ public class RegisterActivity extends MainActivity {
         });
     }
 
-
+    /**
+     * Method used to create and account. Will sign up user with email, username and password. It will also...
+     * set initial values needed.
+     * @param email
+     * @param password
+     * @param username
+     */
     private void createAccount(String email, String password, final String username) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -82,9 +91,10 @@ public class RegisterActivity extends MainActivity {
                                     Toast.LENGTH_SHORT).show();
 
                             FirebaseUser user = mAuth.getCurrentUser();
+                            // NOTE: Below sets various values needed for the application to run.
                             mDatabase.child("users").child(user.getUid()).setValue(new User());
                             mDatabase.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
-                            mDatabase.child("users").child(user.getUid()).child("powerRemaining").setValue(startingPower);
+                            mDatabase.child("users").child(user.getUid()).child("powerRemaining").setValue(STARTING_POWER);
                             mDatabase.child("users").child(user.getUid()).child("username").setValue(username);
 
                             // Windows.
@@ -108,6 +118,7 @@ public class RegisterActivity extends MainActivity {
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("residents").setValue(0);
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(0);
 
+                            // Calendar object needed to set values.
                             Calendar cal = Calendar.getInstance();
 
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.DAY_OF_YEAR));
@@ -118,6 +129,7 @@ public class RegisterActivity extends MainActivity {
 
                             mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(true);
 
+                            // Sets friends, with initial add on yourself for debugging.
                             List<String> friends = new ArrayList<String>();
                             friends.add(mAuth.getCurrentUser().getUid());
 
