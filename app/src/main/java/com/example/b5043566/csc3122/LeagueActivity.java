@@ -1,20 +1,14 @@
 package com.example.b5043566.csc3122;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,41 +25,35 @@ import java.util.TreeSet;
 
 public class LeagueActivity extends MainActivity {
 
+    Map<String, Integer> dailyLeague = new HashMap<String, Integer>();
+    Map<String, Integer> weeklyLeague = new HashMap<String, Integer>();
+    Map<String, Integer> monthlyLeague = new HashMap<String, Integer>();
+    Map<String, Integer> overallLeague = new HashMap<String, Integer>();
     private TextView pos1;
     private TextView pos2;
     private TextView pos3;
     private TextView pos4;
     private TextView pos5;
-
     private TextView user1;
     private TextView user2;
     private TextView user3;
     private TextView user4;
     private TextView user5;
-
     private TextView hour1;
     private TextView hour2;
     private TextView hour3;
     private TextView hour4;
     private TextView hour5;
-
     private Button friends;
     private Button global;
-
     private Button daily;
     private Button weekly;
     private Button monthly;
     private Button overall;
-
     private List<String> topFiveDaily = new ArrayList<String>();
     private List<String> topFiveWeekly = new ArrayList<String>();
     private List<String> topFiveMonthly = new ArrayList<String>();
     private List<String> topFiveOverall = new ArrayList<String>();
-
-    Map<String, Integer> dailyLeague = new HashMap<String, Integer>();
-    Map<String, Integer> weeklyLeague = new HashMap<String, Integer>();
-    Map<String, Integer> monthlyLeague = new HashMap<String, Integer>();
-    Map<String, Integer> overallLeague = new HashMap<String, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +91,7 @@ public class LeagueActivity extends MainActivity {
         // Todo, remove on update.
         friends.setAlpha(.5f);
         friends.setClickable(false);
-        global.setTextColor(Color.parseColor("F9DFBE"));
+        global.setTextColor(Color.parseColor("#F9DFBE"));
 
         // Adds the menu button and applies a fix.
         final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_league);

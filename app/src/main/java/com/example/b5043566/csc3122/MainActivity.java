@@ -1,16 +1,13 @@
 package com.example.b5043566.csc3122;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -27,23 +24,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int TOTAL_WINDOWS_V1 = 15;
+    protected static final String TAG = "MainActivity";
+    protected final static int FIVE_MINUTES = 500; // Todo change!
+    protected static DatabaseReference mDatabase;
     protected DrawerLayout mDrawerLayout;
     protected ImageView menu;
     protected Toolbar toolbar;
     protected NavigationView navigationView;
     protected ActionBarDrawerToggle actionBarDrawerToggle;
-    protected static final String TAG = "MainActivity";
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
-    protected static DatabaseReference mDatabase;
-    protected final static int FIVE_MINUTES = 500; // Todo change!
-    public static final int TOTAL_WINDOWS_V1 = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

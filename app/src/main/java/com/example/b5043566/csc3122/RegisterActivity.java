@@ -2,16 +2,15 @@ package com.example.b5043566.csc3122;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,11 +26,11 @@ import java.util.Random;
 
 public class RegisterActivity extends MainActivity {
 
+    int startingPower = 750;
     private Button submit;
     private EditText emailText;
     private EditText passwordText;
     private EditText usernameText;
-    int startingPower = 750;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

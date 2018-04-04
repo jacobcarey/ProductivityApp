@@ -1,9 +1,8 @@
 package com.example.b5043566.csc3122;
 
 import android.graphics.Color;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,81 +42,86 @@ public class SettingActivity extends MainActivity {
         progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getProgress()){
+                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getProgress()) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("progress").setValue(false);
-                }else{
+                } else {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("progress").setValue(true);
                 }
-            }});
+            }
+        });
 
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNotifications()){
+                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNotifications()) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(false);
-                }else{
+                } else {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(true);
                 }
-            }});
+            }
+        });
 
         holiday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getHoliday()){
+                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getHoliday()) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("holiday").setValue(false);
-                }else{
+                } else {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("holiday").setValue(true);
                 }
-            }});
+            }
+        });
 
         nightMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNightMode()){
+                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNightMode()) {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(false);
-                }else{
+                } else {
                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("nightMode").setValue(true);
                 }
-            }});
+            }
+        });
 
 
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ((ProductivityApp) SettingActivity.this.getApplication()).setUser(dataSnapshot.getValue(User.class));
-                if(dataSnapshot.getValue(User.class).getProgress()){
+                if (dataSnapshot.getValue(User.class).getProgress()) {
                     progress.setBackgroundColor(Color.parseColor("#92D050"));
                     progress.setText("ON");
-                }else{
+                } else {
                     progress.setBackgroundColor(Color.parseColor("#df6467"));
                     progress.setText("OFF");
                 }
 
-                if(dataSnapshot.getValue(User.class).getNotifications()){
+                if (dataSnapshot.getValue(User.class).getNotifications()) {
                     notification.setBackgroundColor(Color.parseColor("#92D050"));
                     notification.setText("ON");
-                }else{
+                } else {
                     notification.setBackgroundColor(Color.parseColor("#df6467"));
                     notification.setText("OFF");
                 }
 
-                if(dataSnapshot.getValue(User.class).getHoliday()){
+                if (dataSnapshot.getValue(User.class).getHoliday()) {
                     holiday.setBackgroundColor(Color.parseColor("#92D050"));
                     holiday.setText("ON");
-                }else{
+                } else {
                     holiday.setBackgroundColor(Color.parseColor("#df6467"));
                     holiday.setText("OFF");
                 }
 
-                if(dataSnapshot.getValue(User.class).getNightMode()){
+                if (dataSnapshot.getValue(User.class).getNightMode()) {
                     nightMode.setBackgroundColor(Color.parseColor("#92D050"));
                     nightMode.setText("ON");
-                }else{
+                } else {
                     nightMode.setBackgroundColor(Color.parseColor("#df6467"));
                     nightMode.setText("OFF");
                 }
 
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
@@ -129,5 +133,5 @@ public class SettingActivity extends MainActivity {
             }
         });
 
-        }
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.b5043566.csc3122;
 
-import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
