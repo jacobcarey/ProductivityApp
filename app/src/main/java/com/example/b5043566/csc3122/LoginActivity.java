@@ -54,7 +54,14 @@ public class LoginActivity extends MainActivity {
             public void onClick(View v) {
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
-                signIn(email, password);
+
+                if(email.isEmpty()|| password.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Field Empty!",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    signIn(email, password);
+                }
+
 
             }
         });

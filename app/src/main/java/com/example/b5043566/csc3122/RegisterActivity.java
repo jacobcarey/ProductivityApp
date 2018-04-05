@@ -55,10 +55,18 @@ public class RegisterActivity extends MainActivity {
         submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
                 String username = usernameText.getText().toString().trim();
-                createAccount(email, password, username);
+
+
+                if(email.isEmpty()|| password.isEmpty() || username.isEmpty()){
+                    Toast.makeText(RegisterActivity.this, "Field Empty!",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    createAccount(email, password, username);
+                }
             }
         });
     }
