@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,11 @@ public class LeagueActivity extends MainActivity {
     private List<String> topFiveMonthly = new ArrayList<String>();
     private List<String> topFiveOverall = new ArrayList<String>();
 
-    public final static int TOP_FIVE = 5;
+    private List<TextView> hours;
+    private List<TextView> pos;
+    private List<TextView> users;
+
+    public static final int TOP_FIVE = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,17 +79,38 @@ public class LeagueActivity extends MainActivity {
         pos4 = (TextView) findViewById(R.id.pos4);
         pos5 = (TextView) findViewById(R.id.pos5);
 
+        pos = new ArrayList<>();
+        pos.add(pos1);
+        pos.add(pos2);
+        pos.add(pos3);
+        pos.add(pos4);
+        pos.add(pos5);
+
         user1 = (TextView) findViewById(R.id.user1);
         user2 = (TextView) findViewById(R.id.user2);
         user3 = (TextView) findViewById(R.id.user3);
         user4 = (TextView) findViewById(R.id.user4);
         user5 = (TextView) findViewById(R.id.user5);
 
+        users = new ArrayList<>();
+        users.add(user1);
+        users.add(user2);
+        users.add(user3);
+        users.add(user4);
+        users.add(user5);
+
         hour1 = (TextView) findViewById(R.id.hours1);
         hour2 = (TextView) findViewById(R.id.hours2);
         hour3 = (TextView) findViewById(R.id.hours3);
         hour4 = (TextView) findViewById(R.id.hours4);
         hour5 = (TextView) findViewById(R.id.hours5);
+
+        hours = new ArrayList<>();
+        hours.add(hour1);
+        hours.add(hour2);
+        hours.add(hour3);
+        hours.add(hour4);
+        hours.add(hour5);
 
         // Tabs for selecting leaderboard.
         daily = (Button) findViewById(R.id.dailyLeague);
@@ -112,16 +138,26 @@ public class LeagueActivity extends MainActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Add values to the maps.
                     User user = snapshot.getValue(User.class);
-                    dailyLeague.put(user.getUsername(), user.getDailyHours());
-                    weeklyLeague.put(user.getUsername(), user.getWeeklyHours());
-                    monthlyLeague.put(user.getUsername(), user.getMonthlyHours());
+                    Calendar cal = Calendar.getInstance();
+
+
+                    if (user.getStatStampMonth() == cal.get(Calendar.MONTH)) {
+                        monthlyLeague.put(user.getUsername(), user.getMonthlyHours());
+                    }
+                    if (user.getStatStampWeek() == cal.get(Calendar.WEEK_OF_YEAR)) {
+                        weeklyLeague.put(user.getUsername(), user.getWeeklyHours());
+                    }
+                    if (user.getStatStampDay() == cal.get(Calendar.DAY_OF_YEAR)) {
+                        dailyLeague.put(user.getUsername(), user.getDailyHours());
+                    }
                     overallLeague.put(user.getUsername(), user.getOverallHours());
+
                 }
 
                 // Daily top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 SortedSet<String> usernames = new TreeSet<String>(dailyLeague.keySet());
-                for (int i = 0; i < 5; i++) { // todo magic
+                for (int i = 0; i < dailyLeague.size(); i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (dailyLeague.get(username) > dailyLeague.get(currentLargest)) {
@@ -135,7 +171,7 @@ public class LeagueActivity extends MainActivity {
                 // Weekly top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(weeklyLeague.keySet());
-                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
+                for (int i = 0; i < weeklyLeague.size(); i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (weeklyLeague.get(username) > weeklyLeague.get(currentLargest)) {
@@ -149,7 +185,7 @@ public class LeagueActivity extends MainActivity {
                 // Monthly top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(monthlyLeague.keySet());
-                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
+                for (int i = 0; i < monthlyLeague.size(); i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (monthlyLeague.get(username) > monthlyLeague.get(currentLargest)) {
@@ -162,7 +198,7 @@ public class LeagueActivity extends MainActivity {
                 // Overall top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(overallLeague.keySet());
-                for (int i = 0; i < TOP_FIVE; i++) { // todo magic
+                for (int i = 0; i < overallLeague.size(); i++) { // todo magic
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (overallLeague.get(username) > overallLeague.get(currentLargest)) {
@@ -192,108 +228,91 @@ public class LeagueActivity extends MainActivity {
         daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLeague(true);
 
-                // Set username on UI.
-                user1.setText(topFiveDaily.get(0));
-                user2.setText(topFiveDaily.get(1));
-                user3.setText(topFiveDaily.get(2));
-                user4.setText(topFiveDaily.get(3));
-                user5.setText(topFiveDaily.get(4));
-
-                // Set hours on UI.
-                hour1.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(0))));
-                hour2.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(1))));
-                hour3.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(2))));
-                hour4.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(3))));
-                hour5.setText(Integer.toString(dailyLeague.get(topFiveDaily.get(4))));
+                // Set username and hours on UI.
+                for (int i = 0; i < topFiveDaily.size(); i++){
+                    users.get(i).setText(topFiveDaily.get(i));
+                    hours.get(i).setText(Integer.toString(dailyLeague.get(topFiveDaily.get(i))));
+                }
 
                 // Set colours.
                 daily.setTextColor(Color.parseColor("#F9DFBE"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
+
+                showLeague(false, TOP_FIVE);
+                showLeague(true, topFiveDaily.size());
             }
         });
 
         weekly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLeague(true);
 
-                // Set username on UI.
-                user1.setText(topFiveWeekly.get(0));
-                user2.setText(topFiveWeekly.get(1));
-                user3.setText(topFiveWeekly.get(2));
-                user4.setText(topFiveWeekly.get(3));
-                user5.setText(topFiveWeekly.get(4));
-
-                // Set hours on UI.
-                hour1.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(0))));
-                hour2.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(1))));
-                hour3.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(2))));
-                hour4.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(3))));
-                hour5.setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(4))));
+                // Set username and hours on UI.
+                for (int i = 0; i < topFiveWeekly.size(); i++){
+                    users.get(i).setText(topFiveWeekly.get(i));
+                    hours.get(i).setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(i))));
+                }
 
                 // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#F9DFBE"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
+
+                showLeague(false, TOP_FIVE);
+                showLeague(true, topFiveWeekly.size());
             }
         });
 
         monthly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLeague(true);
 
-                // Set username on UI.
-                user1.setText(topFiveMonthly.get(0));
-                user2.setText(topFiveMonthly.get(1));
-                user3.setText(topFiveOverall.get(2));
-                user4.setText(topFiveOverall.get(3));
-                user5.setText(topFiveOverall.get(4));
 
-                // Set hours on UI.
-                hour1.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(0))));
-                hour2.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(1))));
-                hour3.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(2))));
-                hour4.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(3))));
-                hour5.setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(4))));
+                // Set username and hours on UI.
+                for (int i = 0; i < topFiveMonthly.size(); i++){
+                    users.get(i).setText(topFiveMonthly.get(i));
+                    hours.get(i).setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(i))));
+                }
 
                 // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#F9DFBE"));
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
+
+                showLeague(false, TOP_FIVE);
+                showLeague(true, topFiveMonthly.size());
             }
         });
 
         overall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLeague(true);
 
-                // Set username on UI.
-                user1.setText(topFiveOverall.get(0));
-                user2.setText(topFiveOverall.get(1));
-                user3.setText(topFiveOverall.get(2));
-                user4.setText(topFiveOverall.get(3));
-                user5.setText(topFiveOverall.get(4));
-
-                // Set hours on UI.
-                hour1.setText(Integer.toString(overallLeague.get(topFiveOverall.get(0))));
-                hour2.setText(Integer.toString(overallLeague.get(topFiveOverall.get(1))));
-                hour3.setText(Integer.toString(overallLeague.get(topFiveOverall.get(2))));
-                hour4.setText(Integer.toString(overallLeague.get(topFiveOverall.get(3))));
-                hour5.setText(Integer.toString(overallLeague.get(topFiveOverall.get(4))));
+                // Set username and hours on UI.
+                int check = 0;
+                if(topFiveOverall.size() > TOP_FIVE){
+                    check = TOP_FIVE;
+                }else{
+                    check = topFiveOverall.size();
+                }
+                for (int i = 0; i < check; i++){
+                    users.get(i).setText(topFiveOverall.get(i));
+                    hours.get(i).setText(Integer.toString(overallLeague.get(topFiveOverall.get(i))));
+                }
 
                 // Set colours.
                 daily.setTextColor(Color.parseColor("#FFFFFF"));
                 weekly.setTextColor(Color.parseColor("#FFFFFF"));
                 monthly.setTextColor(Color.parseColor("#FFFFFF"));
                 overall.setTextColor(Color.parseColor("#F9DFBE"));
+
+                showLeague(false, TOP_FIVE);
+                showLeague(true, check);
             }
         });
     }
@@ -303,7 +322,7 @@ public class LeagueActivity extends MainActivity {
         super.onStart();
 
         // Hide league.
-        showLeague(false);
+        showLeague(false, TOP_FIVE);
 
         // todo remove on update.
         friends.setPaintFlags(friends.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -315,43 +334,19 @@ public class LeagueActivity extends MainActivity {
      *
      * @param show
      */
-    public void showLeague(boolean show) {
+    public void showLeague(boolean show, int size) {
         if (show) {
-            pos1.setVisibility(View.VISIBLE);
-            pos2.setVisibility(View.VISIBLE);
-            pos3.setVisibility(View.VISIBLE);
-            pos4.setVisibility(View.VISIBLE);
-            pos5.setVisibility(View.VISIBLE);
-
-            user1.setVisibility(View.VISIBLE);
-            user2.setVisibility(View.VISIBLE);
-            user3.setVisibility(View.VISIBLE);
-            user4.setVisibility(View.VISIBLE);
-            user5.setVisibility(View.VISIBLE);
-
-            hour1.setVisibility(View.VISIBLE);
-            hour2.setVisibility(View.VISIBLE);
-            hour3.setVisibility(View.VISIBLE);
-            hour4.setVisibility(View.VISIBLE);
-            hour5.setVisibility(View.VISIBLE);
+            for(int i = 0; i < size; i++){
+                pos.get(i).setVisibility(View.VISIBLE);
+                users.get(i).setVisibility(View.VISIBLE);
+                hours.get(i).setVisibility(View.VISIBLE);
+            }
         } else {
-            pos1.setVisibility(View.GONE);
-            pos2.setVisibility(View.GONE);
-            pos3.setVisibility(View.GONE);
-            pos4.setVisibility(View.GONE);
-            pos5.setVisibility(View.GONE);
-
-            user1.setVisibility(View.GONE);
-            user2.setVisibility(View.GONE);
-            user3.setVisibility(View.GONE);
-            user4.setVisibility(View.GONE);
-            user5.setVisibility(View.GONE);
-
-            hour1.setVisibility(View.GONE);
-            hour2.setVisibility(View.GONE);
-            hour3.setVisibility(View.GONE);
-            hour4.setVisibility(View.GONE);
-            hour5.setVisibility(View.GONE);
+            for(int i = 0; i < TOP_FIVE; i++){
+                pos.get(i).setVisibility(View.GONE);
+                users.get(i).setVisibility(View.GONE);
+                hours.get(i).setVisibility(View.GONE);
+            }
         }
     }
 }

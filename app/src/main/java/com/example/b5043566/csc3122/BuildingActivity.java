@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +28,7 @@ import java.util.Random;
 
 public class BuildingActivity extends MainActivity {
 
-    private final int time = 10; // todo magic number
+    private final int time = 500; // todo magic number
     int progress = 0; // // TODO: Remove
     private static final int PROGRESS_COMPLETE = 100;
     private static final int NEW_RESIDENT_HOURS = 10;
@@ -106,6 +107,8 @@ public class BuildingActivity extends MainActivity {
 
                         // Check user is being productive.
                         if (!productive) {
+                            // Prevent sleep.
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                             productive = true;
                             // Set text to stop as power is generating.
                             powerUp.setText("Stop");
@@ -225,6 +228,8 @@ public class BuildingActivity extends MainActivity {
                             progress = 0;
                             // Remove handler.
                             handler.removeCallbacks(runnable);
+                            // Allow screen lock.
+                            getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 
                         }
                     }
