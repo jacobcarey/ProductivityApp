@@ -57,11 +57,11 @@ public class SettingActivity extends MainActivity {
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNotifications()) {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(false);
-                } else {
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(true);
-                }
+//                if (((ProductivityApp) SettingActivity.this.getApplication()).getUser().getNotifications()) {
+//                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(false);
+//                } else {
+//                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notifications").setValue(true);
+//                }
             }
         });
 
@@ -107,13 +107,13 @@ public class SettingActivity extends MainActivity {
                 }
 
                 // Update notification UI.
-                if (dataSnapshot.getValue(User.class).getNotifications()) {
-                    notification.setBackgroundColor(Color.parseColor("#92D050"));
-                    notification.setText("ON");
-                } else {
-                    notification.setBackgroundColor(Color.parseColor("#df6467"));
-                    notification.setText("OFF");
-                }
+//                if (dataSnapshot.getValue(User.class).getNotifications()) {
+//                    notification.setBackgroundColor(Color.parseColor("#92D050"));
+//                    notification.setText("ON");
+//                } else {
+//                    notification.setBackgroundColor(Color.parseColor("#df6467"));
+//                    notification.setText("OFF");
+//                }
 
                 // Update holiday UI.
                 if (dataSnapshot.getValue(User.class).getHoliday()) {

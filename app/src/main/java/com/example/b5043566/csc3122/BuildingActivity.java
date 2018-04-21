@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class BuildingActivity extends MainActivity {
 
-    private final int time = 500; // todo magic number
+    private final int time = 50; // todo magic number
     int progress = 0; // // TODO: Remove
     private static final int PROGRESS_COMPLETE = 100;
     private static final int NEW_RESIDENT_HOURS = 10;
@@ -322,17 +322,17 @@ public class BuildingActivity extends MainActivity {
                     Calendar cal = Calendar.getInstance();
                     // Update stats.
                     // Month stats.
-                    if (dataSnapshot.getValue(User.class).getStatStampMonth() != cal.get(Calendar.MONTH)) {
+                    if (dataSnapshot.getValue(User.class).getStatStampMonth() != (int) cal.get(Calendar.MONTH)) {
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("monthlyHours").setValue(0);
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampMonth").setValue(cal.get(Calendar.MONTH));
                     }
                     // Week Stats,
-                    if (dataSnapshot.getValue(User.class).getStatStampWeek() != cal.get(Calendar.WEEK_OF_YEAR)) {
+                    if (dataSnapshot.getValue(User.class).getStatStampWeek() != (int) cal.get(Calendar.WEEK_OF_YEAR)) {
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("weeklyHours").setValue(0);
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampWeek").setValue(cal.get(Calendar.WEEK_OF_YEAR));
                     }
                     // Year stats.
-                    if (dataSnapshot.getValue(User.class).getStatStampDay() != cal.get(Calendar.DAY_OF_YEAR)) {
+                    if (dataSnapshot.getValue(User.class).getStatStampDay() != (int) cal.get(Calendar.DAY_OF_YEAR)) {
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("dailyHours").setValue(0);
                         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("statStampDay").setValue(cal.get(Calendar.WEEK_OF_YEAR));
                     }

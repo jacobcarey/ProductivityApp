@@ -141,13 +141,13 @@ public class LeagueActivity extends MainActivity {
                     Calendar cal = Calendar.getInstance();
 
 
-                    if (user.getStatStampMonth() == cal.get(Calendar.MONTH)) {
+                    if (user.getStatStampMonth() == (int) cal.get(Calendar.MONTH)) {
                         monthlyLeague.put(user.getUsername(), user.getMonthlyHours());
                     }
-                    if (user.getStatStampWeek() == cal.get(Calendar.WEEK_OF_YEAR)) {
+                    if (user.getStatStampWeek() == (int) cal.get(Calendar.WEEK_OF_YEAR)) {
                         weeklyLeague.put(user.getUsername(), user.getWeeklyHours());
                     }
-                    if (user.getStatStampDay() == cal.get(Calendar.DAY_OF_YEAR)) {
+                    if (user.getStatStampDay() == (int) cal.get(Calendar.DAY_OF_YEAR)) {
                         dailyLeague.put(user.getUsername(), user.getDailyHours());
                     }
                     overallLeague.put(user.getUsername(), user.getOverallHours());
@@ -197,6 +197,7 @@ public class LeagueActivity extends MainActivity {
                 }
                 // Overall top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
+                Log.w(TAG, "TEST: " + overallLeague.keySet().toString());
                 usernames = new TreeSet<String>(overallLeague.keySet());
                 for (int i = 0; i < overallLeague.size(); i++) { // todo magic
                     String currentLargest = usernames.first();
@@ -230,6 +231,10 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
 
                 // Set username and hours on UI.
+                int check = topFiveDaily.size();
+                if(topFiveDaily.size() > TOP_FIVE) {
+                    check = TOP_FIVE;
+                }
                 for (int i = 0; i < topFiveDaily.size(); i++){
                     users.get(i).setText(topFiveDaily.get(i));
                     hours.get(i).setText(Integer.toString(dailyLeague.get(topFiveDaily.get(i))));
@@ -242,7 +247,7 @@ public class LeagueActivity extends MainActivity {
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
 
                 showLeague(false, TOP_FIVE);
-                showLeague(true, topFiveDaily.size());
+                showLeague(true, check);
             }
         });
 
@@ -251,7 +256,11 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
 
                 // Set username and hours on UI.
-                for (int i = 0; i < topFiveWeekly.size(); i++){
+                int check = topFiveWeekly.size();
+                if(topFiveWeekly.size() > TOP_FIVE) {
+                    check = TOP_FIVE;
+                }
+                for (int i = 0; i < check; i++){
                     users.get(i).setText(topFiveWeekly.get(i));
                     hours.get(i).setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(i))));
                 }
@@ -263,7 +272,7 @@ public class LeagueActivity extends MainActivity {
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
 
                 showLeague(false, TOP_FIVE);
-                showLeague(true, topFiveWeekly.size());
+                showLeague(true, check);
             }
         });
 
@@ -271,9 +280,12 @@ public class LeagueActivity extends MainActivity {
             @Override
             public void onClick(View v) {
 
-
+                int check = topFiveMonthly.size();
+                if(topFiveMonthly.size() > TOP_FIVE) {
+                    check = TOP_FIVE;
+                }
                 // Set username and hours on UI.
-                for (int i = 0; i < topFiveMonthly.size(); i++){
+                for (int i = 0; i < check; i++){
                     users.get(i).setText(topFiveMonthly.get(i));
                     hours.get(i).setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(i))));
                 }
@@ -285,7 +297,7 @@ public class LeagueActivity extends MainActivity {
                 overall.setTextColor(Color.parseColor("#FFFFFF"));
 
                 showLeague(false, TOP_FIVE);
-                showLeague(true, topFiveMonthly.size());
+                showLeague(true, check);
             }
         });
 
@@ -294,11 +306,9 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
 
                 // Set username and hours on UI.
-                int check = 0;
-                if(topFiveOverall.size() > TOP_FIVE){
+                int check = topFiveOverall.size();
+                if(topFiveOverall.size() > TOP_FIVE) {
                     check = TOP_FIVE;
-                }else{
-                    check = topFiveOverall.size();
                 }
                 for (int i = 0; i < check; i++){
                     users.get(i).setText(topFiveOverall.get(i));

@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
                         } else if (id == R.id.settings) {
                             Intent newAct = new Intent(getApplicationContext(), SettingActivity.class);
                             startActivity(newAct);
+                        } else if (id == R.id.help) {
+                            Intent newAct = new Intent(getApplicationContext(), HelpActivity.class);
+                            startActivity(newAct);
                         } else if (id == R.id.logout) {
                             FirebaseAuth.getInstance().signOut();
                             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
