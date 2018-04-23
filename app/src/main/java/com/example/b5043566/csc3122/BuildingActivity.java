@@ -75,6 +75,7 @@ public class BuildingActivity extends MainActivity {
                 // Page element IDs are just integer numbers so we can iterate through them easily.
                 int id = (int) R.id.window1 + i;
                 windows.put("w_" + i, (ImageView) findViewById(id));
+
             }
 
             // Important event listener for all user items. The activity WILL NOT run without this listener.
@@ -280,6 +281,8 @@ public class BuildingActivity extends MainActivity {
                             windows.get("w_" + i).setBackgroundColor(Color.parseColor("#F9DFBE"));
                         }
                     }
+
+
                     // Variable needed to update UI mode.
                     ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.active_building);
 

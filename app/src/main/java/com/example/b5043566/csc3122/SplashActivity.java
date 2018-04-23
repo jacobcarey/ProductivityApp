@@ -5,12 +5,15 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.transition.Fade;
 import android.util.Log;
+import android.view.Menu;
 import android.view.Window;
+import android.widget.ProgressBar;
 
 import static android.R.transition.fade;
 import static com.example.b5043566.csc3122.R.drawable.splash;
@@ -19,38 +22,40 @@ import static com.example.b5043566.csc3122.R.drawable.splash;
 public class SplashActivity extends AppCompatActivity {
 
     protected static final String TAG = "SplashActivity";
+    public final static int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Check if we're running on Android 5.0 or higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Apply activity transition
-            // After 5 seconds redirect to another intent
-            Fade fade = new Fade();
-            fade.setDuration(5000);
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setEnterTransition(fade);
-            getWindow().setExitTransition(fade);
-        }
         setContentView(R.layout.activity_splash);
 
-        final Intent intent = new Intent(this, BuildingActivity.class);
-        final ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
-        Thread splash = new Thread() {
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar3);
+        final Runnable runnable;
+
+        final Handler handler = new Handler();
+        handler.postDelayed(runnable = new Runnable(){
+            @Override
             public void run() {
-                try {
-                    // Thread will sleep for 5 seconds
-                    sleep(3*1000);
-                    startActivity(intent, options.toBundle());
-                    finish();
-                } catch (Exception e) {
-                }
+                /* Create an Intent that will start the Menu-Activity. */
+
+                    progressBar.setProgress(progressBar.getProgress() + 1);
+                handler.postDelayed(this, SPLASH_DISPLAY_LENGTH / progressBar.getMax());
             }
-        };
-        // start thread
-    splash.start();
+        }, SPLASH_DISPLAY_LENGTH / progressBar.getMax());
 
-
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                for(int i = 0; i < progressBar.getMax(); i++){
+                    progressBar.setProgress(i);
+                }
+                Intent intent = new Intent(SplashActivity.this, BuildingActivity.class);
+                SplashActivity.this.startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                SplashActivity.this.finish();
+                handler.removeCallbacks(runnable);
+            }
+        }, SPLASH_DISPLAY_LENGTH);
     }
 }
