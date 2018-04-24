@@ -370,11 +370,13 @@ public class BuildingActivity extends MainActivity {
             powerTotal.setText(String.valueOf(powerRemaining));
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
-            if (powerRemaining - (check / FIVE_MINUTES) < LOWEST_VALUE) {
+            if(powerRemaining == LOWEST_VALUE){
+                // Prevent multiple PowerCuts being added.
+            }
+            else if (powerRemaining - (check / FIVE_MINUTES) < LOWEST_VALUE) {
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(LOWEST_VALUE);
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
                 powerTotal.setText(String.valueOf(LOWEST_VALUE));
-
             } else {
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES)));
                 powerTotal.setText(String.valueOf(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))));
