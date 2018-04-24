@@ -28,8 +28,11 @@ import java.util.Random;
 
 public class BuildingActivity extends MainActivity {
 
-    private final int time = 50; // todo magic number
-    int progress = 0; // // TODO: Remove
+    public final static int LOWEST_VALUE = 0;
+    public final static int time = 50; // debug
+    //    public final static int time = 3000; // half a minute
+
+    int progress = 0;
     private static final int PROGRESS_COMPLETE = 100;
     private static final int NEW_RESIDENT_HOURS = 10;
     boolean productive = false;
@@ -41,7 +44,8 @@ public class BuildingActivity extends MainActivity {
     private ProgressBar progressBar;
     private Button powerUp;
     private Map<String, ImageView> windows;
-//    private final int time = 30000; // half a minute
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +133,6 @@ public class BuildingActivity extends MainActivity {
                                     // Create local version of powerPerHour so ease of use.
                                     int powerPerHour = ((ProductivityApp) BuildingActivity.this.getApplication()).getPowerPerHour();
                                     // Delay check.
-                                    // Todo check.
                                     handler.postDelayed(this, time);
                                     // Increment progress.
                                     progress++;
@@ -153,17 +156,17 @@ public class BuildingActivity extends MainActivity {
                                         powerTotal.setText(Integer.toString(powerRemaining));
                                         // Check windows.
                                         int currentWindows = 0;
-                                        // Calculate how many windows are currenly active.
+                                        // Calculate how many windows are currently active.
                                         for (int i = 0; i < TOTAL_WINDOWS_V1; i++) {
                                             boolean window = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + i);
                                             if (window) {
                                                 currentWindows++;
                                             }
                                         }
-                                        // Calculate how many windows SHOULD be currenly active.
+                                        // Calculate how many windows SHOULD be currently active.
                                         int windowCheck = 0;
                                         // Check for devision of 0.
-                                        if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() != 0) {
+                                        if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() != LOWEST_VALUE) {
                                             windowCheck = ((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerRemaining() / (powerPerHour * NEW_RESIDENT_HOURS);
                                         }
 
@@ -173,7 +176,7 @@ public class BuildingActivity extends MainActivity {
                                         } else if (windowCheck > currentWindows) {
                                             // New window needed.
                                             boolean newWindow = true;
-                                            // While loop to check winsow location.
+                                            // While loop to check window location.
                                             while (newWindow) {
                                                 Random rand = new Random();
                                                 int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15.
@@ -355,7 +358,7 @@ public class BuildingActivity extends MainActivity {
     }
 
     /**
-     * Used to check reamaining power and so the requried updates.
+     * Used to check reamaining power and so the required updates.
      *
      * @param power
      * @param lastStudy
@@ -367,13 +370,13 @@ public class BuildingActivity extends MainActivity {
             powerTotal.setText(String.valueOf(powerRemaining));
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
-            if (powerRemaining - (check / FIVE_MINUTES) < 0) {
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(0); // todo magic numberss!!!!!!
+            if (powerRemaining - (check / FIVE_MINUTES) < LOWEST_VALUE) {
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(LOWEST_VALUE);
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);
-                powerTotal.setText(String.valueOf(0));
+                powerTotal.setText(String.valueOf(LOWEST_VALUE));
 
             } else {
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))); // todo magic numberss!!!!!!
+                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(((int) powerRemaining - ((int) (check) / FIVE_MINUTES)));
                 powerTotal.setText(String.valueOf(((int) powerRemaining - ((int) (check) / FIVE_MINUTES))));
 
             }

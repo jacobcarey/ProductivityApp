@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     // Objects needed for page.
     public static final int TOTAL_WINDOWS_V1 = 15;
     protected static final String TAG = "MainActivity";
-    protected final static int FIVE_MINUTES = 500; // Todo change!
+    protected final static int FIVE_MINUTES = 500; // Debug,
+//    protected final static int FIVE_MINUTES = 300000; // Todo change!
     protected static DatabaseReference mDatabase;
     protected DrawerLayout mDrawerLayout;
     protected ImageView menu;

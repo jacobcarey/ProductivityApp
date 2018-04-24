@@ -157,7 +157,7 @@ public class LeagueActivity extends MainActivity {
                 // Daily top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 SortedSet<String> usernames = new TreeSet<String>(dailyLeague.keySet());
-                for (int i = 0; i < dailyLeague.size(); i++) { // todo magic
+                for (int i = 0; i < dailyLeague.size(); i++) {
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (dailyLeague.get(username) > dailyLeague.get(currentLargest)) {
@@ -171,7 +171,7 @@ public class LeagueActivity extends MainActivity {
                 // Weekly top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(weeklyLeague.keySet());
-                for (int i = 0; i < weeklyLeague.size(); i++) { // todo magic
+                for (int i = 0; i < weeklyLeague.size(); i++) {
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (weeklyLeague.get(username) > weeklyLeague.get(currentLargest)) {
@@ -185,7 +185,7 @@ public class LeagueActivity extends MainActivity {
                 // Monthly top 5.
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 usernames = new TreeSet<String>(monthlyLeague.keySet());
-                for (int i = 0; i < monthlyLeague.size(); i++) { // todo magic
+                for (int i = 0; i < monthlyLeague.size(); i++) {
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (monthlyLeague.get(username) > monthlyLeague.get(currentLargest)) {
@@ -199,7 +199,7 @@ public class LeagueActivity extends MainActivity {
                 // Not the nicest solution but works to rank the top 5 users efficiently.
                 Log.w(TAG, "TEST: " + overallLeague.keySet().toString());
                 usernames = new TreeSet<String>(overallLeague.keySet());
-                for (int i = 0; i < overallLeague.size(); i++) { // todo magic
+                for (int i = 0; i < overallLeague.size(); i++) {
                     String currentLargest = usernames.first();
                     for (String username : usernames) {
                         if (overallLeague.get(username) > overallLeague.get(currentLargest)) {
