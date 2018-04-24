@@ -140,7 +140,7 @@ public class BuildingActivity extends MainActivity {
                                     if (progress == PROGRESS_COMPLETE) {
                                         // Turn off productivity.
                                         productive = false;
-                                        // Find gernerate view.
+                                        // Find generate view.
                                         bolt.setVisibility(View.GONE);
                                         // Set text back to study.
                                         powerUp.setText("Power");
@@ -195,7 +195,7 @@ public class BuildingActivity extends MainActivity {
                                             boolean removeWindow = true;
                                             while (removeWindow) {
                                                 Random rand = new Random();
-                                                int n = rand.nextInt(TOTAL_WINDOWS_V1); // Gives n such that 0 <= n < 15
+                                                int n = rand.nextInt(TOTAL_WINDOWS_V1);
                                                 if (((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getWindows().get("w_" + n)) {
                                                     // Remove window.
                                                     mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("windows").child("w_" + n).setValue(false);
@@ -358,7 +358,7 @@ public class BuildingActivity extends MainActivity {
     }
 
     /**
-     * Used to check reamaining power and so the required updates.
+     * Used to check remaining power and so the required updates.
      *
      * @param power
      * @param lastStudy
