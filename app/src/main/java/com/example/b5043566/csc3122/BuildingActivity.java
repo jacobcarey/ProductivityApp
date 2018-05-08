@@ -29,8 +29,8 @@ import java.util.Random;
 public class BuildingActivity extends MainActivity {
 
     public final static int LOWEST_VALUE = 0;
-//    public final static int time = 50; // debug
-        public final static int time = 15000; // quarter a minute
+    //    public final static int time = 50; // debug
+    public final static int time = 15000; // quarter of a minute
 
     int progress = 0;
     private static final int PROGRESS_COMPLETE = 100;
