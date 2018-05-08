@@ -73,6 +73,7 @@ public class LeagueActivity extends MainActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_league, contentFrameLayout);
 
+        // Leaderboard positions.
         pos1 = (TextView) findViewById(R.id.pos1);
         pos2 = (TextView) findViewById(R.id.pos2);
         pos3 = (TextView) findViewById(R.id.pos3);
@@ -86,6 +87,7 @@ public class LeagueActivity extends MainActivity {
         pos.add(pos4);
         pos.add(pos5);
 
+        // Usernames.
         user1 = (TextView) findViewById(R.id.user1);
         user2 = (TextView) findViewById(R.id.user2);
         user3 = (TextView) findViewById(R.id.user3);
@@ -99,6 +101,7 @@ public class LeagueActivity extends MainActivity {
         users.add(user4);
         users.add(user5);
 
+        // Hours.
         hour1 = (TextView) findViewById(R.id.hours1);
         hour2 = (TextView) findViewById(R.id.hours2);
         hour3 = (TextView) findViewById(R.id.hours3);
@@ -140,13 +143,15 @@ public class LeagueActivity extends MainActivity {
                     User user = snapshot.getValue(User.class);
                     Calendar cal = Calendar.getInstance();
 
-
+                    // Check for month.
                     if (user.getStatStampMonth() == (int) cal.get(Calendar.MONTH)) {
                         monthlyLeague.put(user.getUsername(), user.getMonthlyHours());
                     }
+                    // Check for year.
                     if (user.getStatStampWeek() == (int) cal.get(Calendar.WEEK_OF_YEAR)) {
                         weeklyLeague.put(user.getUsername(), user.getWeeklyHours());
                     }
+                    // Check for day.
                     if (user.getStatStampDay() == (int) cal.get(Calendar.DAY_OF_YEAR)) {
                         dailyLeague.put(user.getUsername(), user.getDailyHours());
                     }
@@ -232,10 +237,10 @@ public class LeagueActivity extends MainActivity {
 
                 // Set username and hours on UI.
                 int check = topFiveDaily.size();
-                if(topFiveDaily.size() > TOP_FIVE) {
+                if (topFiveDaily.size() > TOP_FIVE) {
                     check = TOP_FIVE;
                 }
-                for (int i = 0; i < topFiveDaily.size(); i++){
+                for (int i = 0; i < topFiveDaily.size(); i++) {
                     users.get(i).setText(topFiveDaily.get(i));
                     hours.get(i).setText(Integer.toString(dailyLeague.get(topFiveDaily.get(i))));
                 }
@@ -257,10 +262,10 @@ public class LeagueActivity extends MainActivity {
 
                 // Set username and hours on UI.
                 int check = topFiveWeekly.size();
-                if(topFiveWeekly.size() > TOP_FIVE) {
+                if (topFiveWeekly.size() > TOP_FIVE) {
                     check = TOP_FIVE;
                 }
-                for (int i = 0; i < check; i++){
+                for (int i = 0; i < check; i++) {
                     users.get(i).setText(topFiveWeekly.get(i));
                     hours.get(i).setText(Integer.toString(weeklyLeague.get(topFiveWeekly.get(i))));
                 }
@@ -281,11 +286,11 @@ public class LeagueActivity extends MainActivity {
             public void onClick(View v) {
 
                 int check = topFiveMonthly.size();
-                if(topFiveMonthly.size() > TOP_FIVE) {
+                if (topFiveMonthly.size() > TOP_FIVE) {
                     check = TOP_FIVE;
                 }
                 // Set username and hours on UI.
-                for (int i = 0; i < check; i++){
+                for (int i = 0; i < check; i++) {
                     users.get(i).setText(topFiveMonthly.get(i));
                     hours.get(i).setText(Integer.toString(monthlyLeague.get(topFiveMonthly.get(i))));
                 }
@@ -307,10 +312,10 @@ public class LeagueActivity extends MainActivity {
 
                 // Set username and hours on UI.
                 int check = topFiveOverall.size();
-                if(topFiveOverall.size() > TOP_FIVE) {
+                if (topFiveOverall.size() > TOP_FIVE) {
                     check = TOP_FIVE;
                 }
-                for (int i = 0; i < check; i++){
+                for (int i = 0; i < check; i++) {
                     users.get(i).setText(topFiveOverall.get(i));
                     hours.get(i).setText(Integer.toString(overallLeague.get(topFiveOverall.get(i))));
                 }
@@ -346,13 +351,13 @@ public class LeagueActivity extends MainActivity {
      */
     public void showLeague(boolean show, int size) {
         if (show) {
-            for(int i = 0; i < size; i++){
+            for (int i = 0; i < size; i++) {
                 pos.get(i).setVisibility(View.VISIBLE);
                 users.get(i).setVisibility(View.VISIBLE);
                 hours.get(i).setVisibility(View.VISIBLE);
             }
         } else {
-            for(int i = 0; i < TOP_FIVE; i++){
+            for (int i = 0; i < TOP_FIVE; i++) {
                 pos.get(i).setVisibility(View.GONE);
                 users.get(i).setVisibility(View.GONE);
                 hours.get(i).setVisibility(View.GONE);

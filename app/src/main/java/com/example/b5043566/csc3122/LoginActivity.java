@@ -55,10 +55,10 @@ public class LoginActivity extends MainActivity {
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
 
-                if(email.isEmpty()|| password.isEmpty()){
+                if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Field Empty!",
                             Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     signIn(email, password);
                 }
 

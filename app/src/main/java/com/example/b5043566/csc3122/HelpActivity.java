@@ -17,7 +17,6 @@ public class HelpActivity extends MainActivity {
         checkLogin();
 
 
-
         // Needed for menu item to show show.
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_help, contentFrameLayout);

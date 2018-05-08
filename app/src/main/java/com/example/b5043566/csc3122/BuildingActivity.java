@@ -29,8 +29,8 @@ import java.util.Random;
 public class BuildingActivity extends MainActivity {
 
     public final static int LOWEST_VALUE = 0;
-    public final static int time = 50; // debug
-    //    public final static int time = 3000; // half a minute
+//    public final static int time = 50; // debug
+        public final static int time = 15000; // quarter a minute
 
     int progress = 0;
     private static final int PROGRESS_COMPLETE = 100;
@@ -44,7 +44,6 @@ public class BuildingActivity extends MainActivity {
     private ProgressBar progressBar;
     private Button powerUp;
     private Map<String, ImageView> windows;
-
 
 
     @Override
@@ -370,9 +369,10 @@ public class BuildingActivity extends MainActivity {
             powerTotal.setText(String.valueOf(powerRemaining));
         } else {
             long check = System.currentTimeMillis() - lastStudyCheck;
-            if(powerRemaining == LOWEST_VALUE){
+            if (powerRemaining == LOWEST_VALUE) {
                 // Prevent multiple PowerCuts being added.
             }
+            // Power cut.
             else if (powerRemaining - (check / FIVE_MINUTES) < LOWEST_VALUE) {
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerRemaining").setValue(LOWEST_VALUE);
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("powerCuts").setValue(((ProductivityApp) BuildingActivity.this.getApplication()).getUser().getPowerCuts() + 1);

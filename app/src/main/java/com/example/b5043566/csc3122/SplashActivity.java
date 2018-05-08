@@ -33,21 +33,21 @@ public class SplashActivity extends AppCompatActivity {
         final Runnable runnable;
 
         final Handler handler = new Handler();
-        handler.postDelayed(runnable = new Runnable(){
+        handler.postDelayed(runnable = new Runnable() {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
 
-                    progressBar.setProgress(progressBar.getProgress() + 1);
+                progressBar.setProgress(progressBar.getProgress() + 1);
                 handler.postDelayed(this, SPLASH_DISPLAY_LENGTH / progressBar.getMax());
             }
         }, SPLASH_DISPLAY_LENGTH / progressBar.getMax());
 
-        new Handler().postDelayed(new Runnable(){
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                for(int i = 0; i < progressBar.getMax(); i++){
+                for (int i = 0; i < progressBar.getMax(); i++) {
                     progressBar.setProgress(i);
                 }
                 Intent intent = new Intent(SplashActivity.this, BuildingActivity.class);

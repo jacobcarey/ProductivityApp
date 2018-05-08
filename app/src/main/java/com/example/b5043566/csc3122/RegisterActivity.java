@@ -56,15 +56,16 @@ public class RegisterActivity extends MainActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                // Set strings and trim them to fix whitespace errors.
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
                 String username = usernameText.getText().toString().trim();
 
 
-                if(email.isEmpty()|| password.isEmpty() || username.isEmpty()){
+                if (email.isEmpty() || password.isEmpty() || username.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Field Empty!",
                             Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     createAccount(email, password, username);
                 }
             }

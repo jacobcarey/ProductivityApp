@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     // Objects needed for page.
     public static final int TOTAL_WINDOWS_V1 = 15;
     protected static final String TAG = "MainActivity";
-    protected final static int FIVE_MINUTES = 500; // Debug,
-//    protected final static int FIVE_MINUTES = 300000;
+    //    protected final static int FIVE_MINUTES = 500; // Debug,
+    protected final static int FIVE_MINUTES = 300000;
     protected static DatabaseReference mDatabase;
     protected DrawerLayout mDrawerLayout;
     protected ImageView menu;
@@ -101,28 +101,36 @@ public class MainActivity extends AppCompatActivity {
 
                         // Starts new activity based on user click.
                         int id = menuItem.getItemId();
+                        // Login Activity.
                         if (id == R.id.login) {
                             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.home) {
+                            // Main building activity.
                             Intent newAct = new Intent(getApplicationContext(), BuildingActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.register) {
+                            // Register activity.
                             Intent newAct = new Intent(getApplicationContext(), RegisterActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.league) {
+                            // League activity.
                             Intent newAct = new Intent(getApplicationContext(), LeagueActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.stats) {
+                            // Stats Activity.
                             Intent newAct = new Intent(getApplicationContext(), StatsActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.settings) {
+                            // Setting Activity.
                             Intent newAct = new Intent(getApplicationContext(), SettingActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.help) {
+                            // Help Activity
                             Intent newAct = new Intent(getApplicationContext(), HelpActivity.class);
                             startActivity(newAct);
                         } else if (id == R.id.logout) {
+                            // Logout.
                             FirebaseAuth.getInstance().signOut();
                             Intent newAct = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(newAct);

@@ -16,7 +16,6 @@ import com.google.firebase.database.ValueEventListener;
 public class StatsActivity extends MainActivity {
 
     // Objects needed for UI.
-    private Button test;
     private TextView daily;
     private TextView weekly;
     private TextView monthly;
